@@ -10,7 +10,7 @@
 </head>
 
 <body>
-
+    <p class="bg-green-500">asd</p>
 </body>
 
 </html>
