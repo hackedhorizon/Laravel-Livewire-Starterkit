@@ -9,10 +9,7 @@ use App\Modules\User\Interfaces\WriteUserRepositoryInterface;
 class WriteUserRepository implements WriteUserRepositoryInterface
 {
     /**
-     * Create a new user record in the database.
-     *
-     * @param  array  $data  The data to create the user.
-     * @return \App\Models\User The created user instance.
+     * {@inheritdoc}
      */
     public function createUser(UserDTO $userDataObject)
     {
@@ -25,11 +22,7 @@ class WriteUserRepository implements WriteUserRepositoryInterface
     }
 
     /**
-     * Update an existing user record in the database.
-     *
-     * @param  int  $id  The ID of the user to update.
-     * @param  array  $data  The updated data for the user.
-     * @return \App\Models\User|null The updated user instance, or null if user not found.
+     * {@inheritdoc}
      */
     public function updateUser($id, $data)
     {
@@ -43,10 +36,7 @@ class WriteUserRepository implements WriteUserRepositoryInterface
     }
 
     /**
-     * Delete a user record from the database.
-     *
-     * @param  int  $id  The ID of the user to delete.
-     * @return bool True if the user was successfully deleted, false otherwise.
+     * {@inheritdoc}
      */
     public function deleteUser($id)
     {
