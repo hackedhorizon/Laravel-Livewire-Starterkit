@@ -3,6 +3,7 @@
 namespace App\Livewire\Auth;
 
 use App\Modules\User\Services\WriteUserService;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
@@ -21,6 +22,7 @@ class Register extends Component
     #[Validate]
     public $password;
 
+    // Real-time validation via LiveWire
     public function rules()
     {
         return [
@@ -33,11 +35,23 @@ class Register extends Component
 
     public function store(WriteUserService $userService)
     {
+        // Validate
         $validated = $this->validate();
 
+        // Hash the password
         $validated['password'] = Hash::make($this->password);
 
+        // Create a new user via service with the validated data
         $user = $userService->createUser($validated['name'], $validated['username'], $validated['email'], $validated['password']);
+
+        // Login user
+        Auth::login($user);
+
+        // Set flash message
+        session()->flash('message', 'Your registered successfully!');
+
+        // Return user to the main page
+        return $this->redirect(route('home'), navigate: true);
     }
 
     public function mount()

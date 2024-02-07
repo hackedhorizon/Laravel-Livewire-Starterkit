@@ -11,6 +11,9 @@
 
 <body>
     <nav>
+        @if (Auth::check())
+            Welcome, <strong> {{ Auth::user()->name }} </strong> <br>
+        @endif
         <a href="{{ route('home') }}" wire:navigate>Főoldal</a>
         <a href="{{ route('register') }}" wire:navigate>Regisztráció</a>
         <a href="{{ route('login') }}" wire:navigate>Bejelentkezés</a>
