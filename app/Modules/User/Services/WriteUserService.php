@@ -8,23 +8,18 @@ use App\Modules\User\Repositories\WriteUserRepository;
 
 class WriteUserService implements WriteUserServiceInterface
 {
-    private $userDto;
-    private $repository;
+    private WriteUserRepository $repository;
 
-    public function __construct(UserDTO $userDto, WriteUserRepository $repository)
+    public function __construct(WriteUserRepository $repository)
     {
-        $this->userDto = $userDto;
         $this->repository = $repository;
     }
 
     public function createUser($name, $username, $email, $password)
     {
-        $this->userDto->setName($name);
-        $this->userDto->setUsername($username);
-        $this->userDto->setEmail($email);
-        $this->userDto->setPassword($password);
+        $userDto = new UserDTO($name, $username, $email, $password);
 
-        return $this->repository->createUser(array($this->userDto));
+        return $this->repository->createUser($userDto);
     }
 
     public function updateUser($id, $data)
