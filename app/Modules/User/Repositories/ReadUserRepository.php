@@ -20,13 +20,24 @@ class ReadUserRepository implements ReadUserRepositoryInterface
     /**
      * Get a user by their ID.
      *
-     * @param int $id User ID.
-     *
+     * @param  int  $id  User ID.
      * @return \App\Models\User|null
      */
     public function getUserById($id)
     {
         return User::find($id);
     }
-}
 
+    /**
+     * Find a user via it's username or email.
+     *
+     * @param  string  $identifier
+     * @return \App\Models\User|null
+     */
+    public function findByUsernameOrEmail($identifier)
+    {
+        return User::where('username', $identifier)
+            ->orWhere('email', $identifier)
+            ->first();
+    }
+}

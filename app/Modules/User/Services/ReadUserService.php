@@ -23,4 +23,9 @@ class ReadUserService implements ReadUserServiceInterface
     {
         return $this->repository->getUserByID($id);
     }
+
+    public function findUserByUsernameOrEmail($identifier)
+    {
+        return $this->repository->findByUsernameOrEmail($identifier);
+    }
 }
