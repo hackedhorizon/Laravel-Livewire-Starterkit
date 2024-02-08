@@ -27,16 +27,19 @@ class Login extends Component
 
     public function login(ReadUserService $userService)
     {
+        // Validate input fields
         $validated = $this->validate();
 
+        // Find user in database
         $user = $userService->findUserByUsernameOrEmail($validated['identifier']);
 
+        // If not found show a status message
         if ($user === null) {
-
             $this->status = "We didn't find any user with the provided data.";
+        }
 
-        } else {
-
+        // If found, log the user in and add a session flash message
+        else {
             Auth::login($user);
 
             session()->flash('message', 'Successful login!');
