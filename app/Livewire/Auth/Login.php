@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Auth;
 
-use Illuminate\Support\Facades\Auth;
+use App\Modules\User\Services\AuthService;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
@@ -19,27 +19,17 @@ class Login extends Component
         return view('livewire.auth.login');
     }
 
-    public function login()
+    public function login(AuthService $authService)
     {
-        // Validate form fields.
+        // Validate form fields
         $this->validate();
 
-        // Authentication was successful
-        if (
-            Auth::attempt(['email' => $this->identifier, 'password' => $this->password]) ||
-
-            Auth::attempt(['username' => $this->identifier, 'password' => $this->password])
-        ) {
-            session()->regenerate();
-
-            session()->flash('message', 'Successful login!');
-
+        // Authentication attempt
+        if ($authService->attemptLogin($this->identifier, $this->password)) {
             return $this->redirect(route('home'), navigate: true);
         }
 
         // Authentication failed
-        else {
-            $this->addError('email', 'Invalid identifier or password.');
-        }
+        $this->addError('authentication', 'Invalid identifier or password.');
     }
 }
