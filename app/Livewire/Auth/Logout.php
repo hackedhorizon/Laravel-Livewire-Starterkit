@@ -10,6 +10,8 @@ class Logout extends Component
     public function logout()
     {
         Auth::logout();
+        session()->invalidate();
+        session()->regenerate();
         $this->redirect(route('home'), navigate: true);
     }
 

@@ -14,9 +14,9 @@
             <button class="mt-2" wire:loading.attr="disabled" wire:target="login">Bejelentkezés</button>
         </label>
 
-        <p wire.model='status'>
-            {{ $status }}
-        </p>
+        @error('email')
+            {{ $message }}
+        @enderror
     </form>
 
 </div>

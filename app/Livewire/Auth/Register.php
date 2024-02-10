@@ -10,48 +10,21 @@ use Livewire\Component;
 
 class Register extends Component
 {
-    #[Validate]
-    public $name;
+    #[Validate('required|string|max:50')]
+    public string $name;
 
-    #[Validate]
-    public $username;
+    #[Validate('required|string|max:30|unique:users,username')]
+    public string $username;
 
-    #[Validate]
-    public $email;
+    #[Validate('required|email|max:50|unique:users,email')]
+    public string $email;
 
-    #[Validate]
-    public $password;
+    #[Validate('required|string|min:6|max:300')]
+    public string $password;
 
-    // Real-time validation via LiveWire
-    public function rules()
+    public function render()
     {
-        return [
-            'name' => 'required|string|max:50',
-            'username' => 'required|string|max:30|unique:users,username',
-            'email' => 'required|email|max:50|unique:users,email',
-            'password' => 'required|string|min:6|max:300',
-        ];
-    }
-
-    public function store(WriteUserService $userService)
-    {
-        // Validate
-        $validated = $this->validate();
-
-        // Hash the password
-        $validated['password'] = Hash::make($this->password);
-
-        // Create a new user via service with the validated data
-        $user = $userService->createUser($validated['name'], $validated['username'], $validated['email'], $validated['password']);
-
-        // Login user
-        Auth::login($user);
-
-        // Set flash message
-        session()->flash('message', 'Your registered successfully!');
-
-        // Return user to the main page
-        return $this->redirect(route('home'), navigate: true);
+        return view('livewire.auth.register');
     }
 
     public function mount()
@@ -62,8 +35,24 @@ class Register extends Component
         $this->password = '';
     }
 
-    public function render()
+    public function store(WriteUserService $userService)
     {
-        return view('livewire.auth.register');
+        // Validate data
+        $this->validate();
+
+        // Hash the password
+        $this->password = Hash::make($this->password);
+
+        // Create a new user via service with the validated data
+        $user = $userService->createUser($this->name, $this->username, $this->email, $this->password);
+
+        // Login user
+        Auth::login($user);
+
+        // Set flash message
+        session()->flash('message', 'Your registered successfully!');
+
+        // Return user to the main page
+        return $this->redirect(route('home'), navigate: true);
     }
 }
