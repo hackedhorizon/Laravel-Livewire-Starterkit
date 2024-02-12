@@ -3,6 +3,7 @@
 namespace App\Modules\User\Services;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class AuthService
 {
@@ -15,36 +16,55 @@ class AuthService
      */
     public function attemptLogin(string $identifier, string $password): bool
     {
-        // Attempt authentication with email
-        if (Auth::attempt(['email' => $identifier, 'password' => $password])) {
+        $credentials = [];
+
+        if (filter_var($identifier, FILTER_VALIDATE_EMAIL)) {
+            $credentials = [
+                'email' => $identifier,
+                'password' => $password,
+            ];
+        } else {
+            $credentials = [
+                'username' => $identifier,
+                'password' => $password,
+            ];
+        }
+
+        if (Auth::attempt($credentials)) {
             $this->onSuccessfulLogin();
 
             return true;
         }
 
-        // Attempt authentication with username
-        if (Auth::attempt(['username' => $identifier, 'password' => $password])) {
-            $this->onSuccessfulLogin();
+        $this->onFailedLogin($identifier);
 
-            return true;
-        }
-
-        // Authentication failed
         return false;
     }
 
     /**
      * Actions to perform on a successful login.
      *
-     * - Regenerate session ID for security.
+     * - Regenerate session ID to avoid session fixation.
      * - Flash success message.
      */
-    private function onSuccessfulLogin()
+    private function onSuccessfulLogin(): void
     {
-        // Regenerate session ID for security
         session()->regenerate();
-
-        // Flash success message
         session()->flash('message', 'Successful login!');
+    }
+
+    /**
+     * Actions to perform on a failed login attempt.
+     *
+     * - Log the login attempt.
+     */
+    private function onFailedLogin($identifier): void
+    {
+        // Log the failed login attempt
+        Log::warning('Failed login attempt', [
+            'identifier' => $identifier,
+            'ip_address' => request()->ip(),
+            'timestamp' => now(),
+        ]);
     }
 }

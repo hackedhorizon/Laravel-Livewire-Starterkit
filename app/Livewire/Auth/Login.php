@@ -26,10 +26,12 @@ class Login extends Component
 
         // Authentication attempt
         if ($authService->attemptLogin($this->identifier, $this->password)) {
+
+            // Authentication successful
             return $this->redirect(route('home'), navigate: true);
         }
 
         // Authentication failed
-        $this->addError('authentication', 'Invalid identifier or password.');
+        $this->addError('authentication', 'Invalid credentials. Please try again.');
     }
 }
