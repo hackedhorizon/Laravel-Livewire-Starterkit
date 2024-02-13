@@ -5,9 +5,13 @@
 
     <form wire:submit='login' class="max-w-md mx-auto">
 
-        @foreach (['username / Email', 'password'] as $key => $field)
+        @foreach (['username', 'password'] as $key => $field)
+            @php
+                $current = 'validation.attributes.' . $field;
+            @endphp
+
             <x-forms.input id="{{ $key }}" type="{{ $field === 'password' ? 'password' : 'text' }}"
-                placeholder="{{ ucfirst($field) }}" variable="{{ $values[$key] }}" />
+                placeholder="{{ __($current) }}" variable="{{ $values[$key] }}" />
         @endforeach
 
         <label>

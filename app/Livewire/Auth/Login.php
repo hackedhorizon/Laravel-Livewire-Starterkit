@@ -32,6 +32,6 @@ class Login extends Component
         }
 
         // Authentication failed
-        $this->addError('authentication', 'Invalid credentials. Please try again.');
+        $this->addError('authentication', __('auth.failed'));
     }
 }
