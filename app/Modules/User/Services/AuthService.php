@@ -66,5 +66,6 @@ class AuthService
             'ip_address' => request()->ip(),
             'timestamp' => now(),
         ]);
+        // TODO - change this to builtin
     }
 }

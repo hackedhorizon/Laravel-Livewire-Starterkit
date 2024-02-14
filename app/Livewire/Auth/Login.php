@@ -32,6 +32,6 @@ class Login extends Component
         }
 
         // Authentication failed
-        $this->addError('authentication', __('auth.failed'));
+        $this->addError('authentication', trans('auth.failed'));
     }
 }
