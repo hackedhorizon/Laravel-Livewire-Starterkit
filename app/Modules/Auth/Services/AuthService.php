@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Modules\User\Services;
+namespace App\Modules\Auth\Services;
 
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 class AuthService
 {
@@ -36,7 +35,7 @@ class AuthService
             return true;
         }
 
-        $this->onFailedLogin($identifier);
+        $this->onFailedLogin();
 
         return false;
     }
@@ -55,17 +54,9 @@ class AuthService
 
     /**
      * Actions to perform on a failed login attempt.
-     *
-     * - Log the login attempt.
      */
-    private function onFailedLogin($identifier): void
+    private function onFailedLogin(): void
     {
-        // Log the failed login attempt
-        Log::warning('Failed login attempt', [
-            'identifier' => $identifier,
-            'ip_address' => request()->ip(),
-            'timestamp' => now(),
-        ]);
-        // TODO - change this to builtin
+
     }
 }

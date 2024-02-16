@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Auth;
 
-use App\Modules\User\Services\AuthService;
+use App\Modules\Auth\Services\AuthService;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
