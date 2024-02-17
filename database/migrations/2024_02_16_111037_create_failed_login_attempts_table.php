@@ -14,7 +14,7 @@ return new class extends Migration
 
         Schema::create('failed_login_attempts', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('user_id')->nullable();
+            $table->foreignId('user_id')->constrained();
             $table->string('email_address');
             $table->ipAddress('ip_address');
             $table->timestamps();
