@@ -2,40 +2,92 @@
 
 namespace App\Modules\Auth\DTOs;
 
+/**
+ * Data Transfer Object (DTO) for representing a login attempt.
+ */
 class LoginAttemptDTO
 {
+    /**
+     * The user ID associated with the login attempt.
+     */
+    private string $user_id;
+
+    /**
+     * The email address used for the login attempt.
+     */
+    private string $email_address;
+
+    /**
+     * The IP address from which the login attempt was made.
+     */
+    private string $ip_address;
+
+    /**
+     * Create a new LoginAttemptDTO instance.
+     *
+     * @param  string  $user_id  The user ID associated with the login attempt.
+     * @param  string  $email_address  The email address used for the login attempt.
+     * @param  string  $ip_address  The IP address from which the attempt was made.
+     */
     public function __construct(
-        private string $user_id,
-        private string $email_address,
-        private string $ip_address
+        string $user_id,
+        string $email_address,
+        string $ip_address
     ) {
+        $this->user_id = $user_id;
+        $this->email_address = $email_address;
+        $this->ip_address = $ip_address;
     }
 
+    /**
+     * Get the user ID associated with the login attempt.
+     */
     public function getUserId(): string
     {
         return $this->user_id;
     }
 
+    /**
+     * Get the email address used for the login attempt.
+     */
     public function getEmailAddress(): string
     {
         return $this->email_address;
     }
 
+    /**
+     * Get the IP address from which the login attempt was made.
+     */
     public function getIpAddress(): string
     {
         return $this->ip_address;
     }
 
-    public function setUserId(string $ip_address): void
+    /**
+     * Set the user ID associated with the login attempt.
+     *
+     * @param  string  $user_id  The user ID to set.
+     */
+    public function setUserId(string $user_id): void
     {
-        $this->ip_address = $ip_address;
+        $this->user_id = $user_id;
     }
 
+    /**
+     * Set the email address used for the login attempt.
+     *
+     * @param  string  $email_address  The email address to set.
+     */
     public function setEmailAddress(string $email_address): void
     {
         $this->email_address = $email_address;
     }
 
+    /**
+     * Set the IP address from which the login attempt was made.
+     *
+     * @param  string  $ip_address  The IP address to set.
+     */
     public function setIpAddress(string $ip_address): void
     {
         $this->ip_address = $ip_address;

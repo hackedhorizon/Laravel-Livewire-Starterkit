@@ -37,5 +37,6 @@ class FailedLoginAttemptListener
         Log::warning('----------------------------------');
         Log::warning('The login attempt was stored in the database successfully.');
         Log::warning('See additional details for reference.');
+        Log::warning('');
     }
 }

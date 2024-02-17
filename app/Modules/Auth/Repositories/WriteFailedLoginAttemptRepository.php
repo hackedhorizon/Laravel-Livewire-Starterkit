@@ -8,7 +8,10 @@ use App\Modules\Auth\Interfaces\WriteFailedLoginAttemptRepositoryInterface;
 
 class WriteFailedLoginAttemptRepository implements WriteFailedLoginAttemptRepositoryInterface
 {
-    public function createFailedLoginAttempt(LoginAttemptDTO $login_attempt_details)
+    /**
+     * {@inheritdoc}
+     */
+    public function createFailedLoginAttempt(LoginAttemptDTO $login_attempt_details): ?FailedLoginAttempt
     {
         return FailedLoginAttempt::create([
             'user_id' => $login_attempt_details->getUserId(),
@@ -17,8 +20,11 @@ class WriteFailedLoginAttemptRepository implements WriteFailedLoginAttemptReposi
         ]);
     }
 
-    public function deleteFailedLoginAttempt(string $id)
+    /**
+     * {@inheritdoc}
+     */
+    public function deleteFailedLoginAttempt(string $id): bool
     {
-
+        return FailedLoginAttempt::find($id)->delete();
     }
 }
