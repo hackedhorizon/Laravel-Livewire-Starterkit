@@ -12,6 +12,7 @@ class FailedLoginAttemptSeeder extends Seeder
      */
     public function run(): void
     {
+        // Create 10 dummy failed login attempts
         FailedLoginAttempt::factory(10)->create();
     }
 }

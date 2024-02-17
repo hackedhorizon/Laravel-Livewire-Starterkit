@@ -13,15 +13,12 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create 10 dummy users
+        // Create 10 dummy users using the User factory
         User::factory(10)->create();
 
-        // Create a dummy user with the following default credentials:
-        //  - username: dummy
-        //  - password: password
-
-        $this->call([
-            'name' => 'John Legend',
+        // Create a default guest user with fixed credentials (username: dummy, password: password)
+        $user = User::factory(User::class)->create([
+            'name' => fake()->unique()->name(),
             'username' => 'dummy',
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
