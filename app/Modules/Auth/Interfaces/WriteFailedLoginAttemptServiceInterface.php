@@ -2,8 +2,12 @@
 
 namespace App\Modules\Auth\Interfaces;
 
+use App\Models\FailedLoginAttempt;
+
 /**
- * Interface for writing (creating and deleting) failed login attempts via a service.
+ * Interface ReadFailedLoginAttemptServiceInterface
+ *
+ * Represents a repository for writing (creating and deleting) failed login attempts via a service.
  */
 interface WriteFailedLoginAttemptServiceInterface
 {
@@ -13,15 +17,15 @@ interface WriteFailedLoginAttemptServiceInterface
      * @param  string  $user_id  The user ID associated with the failed login attempt.
      * @param  string  $email_address  The email address used for the login attempt.
      * @param  string  $ip_address  The IP address from which the attempt was made.
-     * @return void
+     * @return FailedLoginAttempt|null The created FailedLoginAttempt or null if creation failed.
      */
-    public function createFailedLoginAttempt(string $user_id, string $email_address, string $ip_address);
+    public function createFailedLoginAttempt(string $user_id, string $email_address, string $ip_address): ?FailedLoginAttempt;
 
     /**
      * Delete a specific failed login attempt record by ID.
      *
      * @param  string  $id  The unique identifier of the failed login attempt to be deleted.
-     * @return void
+     * @return bool True if the deletion was successful, false otherwise.
      */
-    public function deleteFailedLoginAttempt(string $id);
+    public function deleteFailedLoginAttempt(string $id): bool;
 }

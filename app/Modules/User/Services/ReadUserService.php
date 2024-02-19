@@ -2,8 +2,10 @@
 
 namespace App\Modules\User\Services;
 
+use App\Models\User;
 use App\Modules\User\Interfaces\ReadUserServiceInterface;
 use App\Modules\User\Repositories\ReadUserRepository;
+use Illuminate\Database\Eloquent\Collection;
 
 class ReadUserService implements ReadUserServiceInterface
 {
@@ -14,17 +16,26 @@ class ReadUserService implements ReadUserServiceInterface
         $this->repository = $repository;
     }
 
-    public function getUsers()
+    /**
+     * {@inheritdoc}
+     */
+    public function getUsers(): Collection
     {
         return $this->repository->getAllUsers();
     }
 
-    public function getUserById($id)
+    /**
+     * {@inheritdoc}
+     */
+    public function getUserById($id): ?User
     {
         return $this->repository->getUserByID($id);
     }
 
-    public function findUserByUsernameOrEmail($identifier)
+    /**
+     * {@inheritdoc}
+     */
+    public function findUserByUsernameOrEmail($identifier): ?User
     {
         return $this->repository->findByUsernameOrEmail($identifier);
     }

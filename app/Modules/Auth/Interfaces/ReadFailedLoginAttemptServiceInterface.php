@@ -6,7 +6,9 @@ use App\Models\FailedLoginAttempt;
 use Illuminate\Database\Eloquent\Collection;
 
 /**
- * Interface for reading failed login attempts via a service.
+ * Interface ReadFailedLoginAttemptServiceInterface
+ *
+ * Represents a repository for reading failed login attempts via a service.
  */
 interface ReadFailedLoginAttemptServiceInterface
 {

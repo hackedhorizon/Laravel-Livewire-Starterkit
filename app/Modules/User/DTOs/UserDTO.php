@@ -2,90 +2,128 @@
 
 namespace App\Modules\User\DTOs;
 
+/**
+ * Data Transfer Object (DTO) for representing a user entity.
+ */
 class UserDTO
 {
-
-    public function __construct
-    (
-        private string $name,
-        private string $username,
-        private string $email,
-        private string $password
-    ){}
+    /**
+     * The user's name.
+     */
+    private string $name;
 
     /**
-     * Get the value of password
+     * The user's username.
      */
-    public function getPassword()
+    private string $username;
+
+    /**
+     * The user's email address.
+     */
+    private string $email;
+
+    /**
+     * The user's password.
+     */
+    private string $password;
+
+    /**
+     * Create a new UserDTO instance.
+     *
+     * @param  string  $name  The user's name.
+     * @param  string  $username  The user's username.
+     * @param  string  $email  The user's email address.
+     * @param  string  $password  The user's password.
+     */
+    public function __construct(
+        string $name,
+        string $username,
+        string $email,
+        string $password
+    ) {
+        $this->name = $name;
+        $this->username = $username;
+        $this->email = $email;
+        $this->password = $password;
+    }
+
+    /**
+     * Get the value of password.
+     */
+    public function getPassword(): string
     {
         return $this->password;
     }
 
     /**
-     * Set the value of password
+     * Set the value of password.
      *
-     * @return  self
+     * @param  string  $password  The user's password.
      */
-    public function setPassword($password)
+    public function setPassword(string $password): self
     {
         $this->password = $password;
+
         return $this;
     }
 
     /**
-     * Get the value of email
+     * Get the value of email.
      */
-    public function getEmail()
+    public function getEmail(): string
     {
         return $this->email;
     }
 
     /**
-     * Set the value of email
+     * Set the value of email.
      *
-     * @return  self
+     * @param  string  $email  The user's email address.
      */
-    public function setEmail($email)
+    public function setEmail(string $email): self
     {
         $this->email = $email;
+
         return $this;
     }
 
     /**
-     * Get the value of username
+     * Get the value of username.
      */
-    public function getUsername()
+    public function getUsername(): string
     {
         return $this->username;
     }
 
     /**
-     * Set the value of username
+     * Set the value of username.
      *
-     * @return  self
+     * @param  string  $username  The user's username.
      */
-    public function setUsername($username)
+    public function setUsername(string $username): self
     {
         $this->username = $username;
+
         return $this;
     }
 
     /**
-     * Get the value of name
+     * Get the value of name.
      */
-    public function getName()
+    public function getName(): string
     {
-            return $this->name;
+        return $this->name;
     }
 
     /**
-     * Set the value of name
+     * Set the value of name.
      *
-     * @return  self
+     * @param  string  $name  The user's name.
      */
-    public function setName($name)
+    public function setName(string $name): self
     {
         $this->name = $name;
+
         return $this;
     }
 }

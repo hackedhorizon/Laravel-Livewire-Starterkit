@@ -2,6 +2,7 @@
 
 namespace App\Modules\User\Interfaces;
 
+use App\Models\User;
 use App\Modules\User\DTOs\UserDTO;
 
 /**
@@ -17,7 +18,7 @@ interface WriteUserRepositoryInterface
      * @param  UserDTO  $userDataObject  User DTO for creation.
      * @return \App\Models\User|null Created user instance or null if creation fails.
      */
-    public function createUser(UserDTO $userDataObject);
+    public function createUser(UserDTO $userDataObject): ?User;
 
     /**
      * Update an existing user.
@@ -26,7 +27,7 @@ interface WriteUserRepositoryInterface
      * @param  array  $data  Updated user data.
      * @return \App\Models\User|null Updated user instance or null if update fails.
      */
-    public function updateUser($id, $data);
+    public function updateUser($id, $data): ?User;
 
     /**
      * Delete a user.
@@ -34,5 +35,5 @@ interface WriteUserRepositoryInterface
      * @param  int  $id  User ID to delete.
      * @return bool True if deletion is successful, false otherwise.
      */
-    public function deleteUser($id);
+    public function deleteUser($id): bool;
 }

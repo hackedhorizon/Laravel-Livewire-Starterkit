@@ -4,37 +4,30 @@ namespace App\Modules\User\Repositories;
 
 use App\Models\User;
 use App\Modules\User\Interfaces\ReadUserRepositoryInterface;
+use Illuminate\Database\Eloquent\Collection;
 
 class ReadUserRepository implements ReadUserRepositoryInterface
 {
     /**
-     * Get all users.
-     *
-     * @return \Illuminate\Database\Eloquent\Collection
+     * {@inheritdoc}
      */
-    public function getAllUsers()
+    public function getAllUsers(): Collection
     {
         return User::all();
     }
 
     /**
-     * Get a user by their ID.
-     *
-     * @param  int  $id  User ID.
-     * @return \App\Models\User|null
+     * {@inheritdoc}
      */
-    public function getUserById($id)
+    public function getUserById($id): ?User
     {
         return User::find($id);
     }
 
     /**
-     * Find a user via it's username or email.
-     *
-     * @param  string  $identifier
-     * @return \App\Models\User|null
+     * {@inheritdoc}
      */
-    public function findByUsernameOrEmail($identifier)
+    public function findByUsernameOrEmail($identifier): ?User
     {
         return User::where('username', $identifier)
             ->orWhere('email', $identifier)

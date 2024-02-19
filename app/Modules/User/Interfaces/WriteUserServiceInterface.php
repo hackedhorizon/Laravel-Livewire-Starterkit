@@ -2,42 +2,40 @@
 
 namespace App\Modules\User\Interfaces;
 
+use App\Models\User;
+
 /**
  * Interface WriteUserServiceInterface
  *
  * Represents a service for writing user data.
  */
-
 interface WriteUserServiceInterface
 {
     /**
      * Create a new user.
      *
-     * @param string $name     User's name.
-     * @param string $username User's username.
-     * @param string $email    User's email.
-     * @param string $password User's password.
-     *
+     * @param  string  $name  User's name.
+     * @param  string  $username  User's username.
+     * @param  string  $email  User's email.
+     * @param  string  $password  User's password.
      * @return array|null Created user data or null if creation fails.
      */
-    public function createUser($name, $username, $email, $password);
+    public function createUser($name, $username, $email, $password): ?User;
 
     /**
      * Update an existing user.
      *
-     * @param int   $id   User ID to update.
-     * @param array $data Updated user data.
-     *
+     * @param  int  $id  User ID to update.
+     * @param  array  $data  Updated user data.
      * @return array|null Updated user data or null if update fails.
      */
-    public function updateUser($id, $data);
+    public function updateUser($id, $data): ?User;
 
     /**
      * Delete a user.
      *
-     * @param int $id User ID to delete.
-     *
+     * @param  int  $id  User ID to delete.
      * @return bool True if deletion is successful, false otherwise.
      */
-    public function deleteUser($id);
+    public function deleteUser($id): bool;
 }

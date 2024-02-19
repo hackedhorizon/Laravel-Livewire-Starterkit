@@ -6,7 +6,9 @@ use App\Models\FailedLoginAttempt;
 use App\Modules\Auth\DTOs\LoginAttemptDTO;
 
 /**
- * Interface for writing (creating and deleting) failed login attempts to the repository.
+ * Interface ReadFailedLoginAttemptServiceInterface
+ *
+ * Represents a repository for writing (creating and deleting) failed login attempts to the repository.
  */
 interface WriteFailedLoginAttemptRepositoryInterface
 {

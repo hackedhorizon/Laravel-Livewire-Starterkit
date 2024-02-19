@@ -11,7 +11,7 @@ class WriteUserRepository implements WriteUserRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function createUser(UserDTO $userDataObject)
+    public function createUser(UserDTO $userDataObject): ?User
     {
         return User::create([
             'name' => $userDataObject->getName(),
@@ -24,7 +24,7 @@ class WriteUserRepository implements WriteUserRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function updateUser($id, $data)
+    public function updateUser($id, $data): ?User
     {
         $user = User::find($id);
 
@@ -38,7 +38,7 @@ class WriteUserRepository implements WriteUserRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function deleteUser($id)
+    public function deleteUser($id): bool
     {
         $user = User::find($id);
 
