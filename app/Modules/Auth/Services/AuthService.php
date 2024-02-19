@@ -2,16 +2,13 @@
 
 namespace App\Modules\Auth\Services;
 
+use App\Modules\Auth\Interfaces\AuthServiceInterface;
 use Illuminate\Support\Facades\Auth;
 
-class AuthService
+class AuthService implements AuthServiceInterface
 {
     /**
-     * Attempt to authenticate the user.
-     *
-     * @param  string  $identifier  The username or email of the user.
-     * @param  string  $password  The user's password.
-     * @return bool True if authentication is successful, false otherwise.
+     * {@inheritdoc}
      */
     public function attemptLogin(string $identifier, string $password): bool
     {
@@ -41,21 +38,18 @@ class AuthService
     }
 
     /**
-     * Actions to perform on a successful login.
-     *
-     * - Regenerate session ID to avoid session fixation.
-     * - Flash success message.
+     * {@inheritdoc}
      */
-    private function onSuccessfulLogin(): void
+    public function onSuccessfulLogin(): void
     {
         session()->regenerate();
         session()->flash('message', 'Successful login!');
     }
 
     /**
-     * Actions to perform on a failed login attempt.
+     * {@inheritdoc}
      */
-    private function onFailedLogin(): void
+    public function onFailedLogin(): void
     {
 
     }

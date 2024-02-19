@@ -2,30 +2,24 @@
 
 namespace App\Modules\User\Services;
 
+use App\Models\User;
+use App\Modules\User\Interfaces\RegistrationServiceInterface;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
-class RegistrationService
+class RegistrationService implements RegistrationServiceInterface
 {
-    // Instance of WriteUserService for creating new users
     public WriteUserService $userService;
 
-    // Constructor to inject the WriteUserService dependency
     public function __construct(WriteUserService $userService)
     {
         $this->userService = $userService;
     }
 
     /**
-     * Register a new user.
-     *
-     * @param  string  $name  The name of the user.
-     * @param  string  $username  The username of the user.
-     * @param  string  $email  The email of the user.
-     * @param  string  $password  The plain text password of the user.
-     * @return mixed The created user entity.
+     * {@inheritdoc}
      */
-    public function registerUser(string $name, string $username, string $email, string $password)
+    public function registerUser(string $name, string $username, string $email, string $password): ?User
     {
         // Hash the password
         $hashedPassword = Hash::make($password);

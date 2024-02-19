@@ -9,14 +9,8 @@ use App\Modules\Auth\Repositories\WriteFailedLoginAttemptRepository;
 
 class WriteFailedLoginAttemptService implements WriteFailedLoginAttemptServiceInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public WriteFailedLoginAttemptRepository $repository;
 
-    /**
-     * {@inheritdoc}
-     */
     public function __construct(WriteFailedLoginAttemptRepository $repository)
     {
         $this->repository = $repository;

@@ -9,9 +9,6 @@ use Illuminate\Database\Eloquent\Collection;
 
 class ReadFailedLoginAttemptService implements ReadFailedLoginAttemptServiceInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public ReadFailedLoginAttemptRepository $repository;
 
     public function __construct(ReadFailedLoginAttemptRepository $repository)
