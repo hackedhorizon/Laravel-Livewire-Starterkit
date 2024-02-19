@@ -124,7 +124,7 @@ class AuthenticationTest extends TestCase
     public function test_it_attempts_login_with_email()
     {
         // Arrange: Create an instance of the AuthService
-        // Act: Simulate a Livewire test scenario where a user attempts login with an email
+        // Act: Simulate a test scenario where a user attempts login with an email
         // Assert: Verify that authentication is successful, and a success message is flashed to the session
         $authService = new AuthService;
 
@@ -143,7 +143,7 @@ class AuthenticationTest extends TestCase
     public function test_it_handles_failed_login()
     {
         // Arrange: Create an instance of the AuthService
-        // Act: Simulate a Livewire test scenario where a user attempts login with invalid credentials
+        // Act: Simulate a test scenario where a user attempts login with invalid credentials
         // Assert: Verify that authentication fails, and no success message is present in the session
         $authService = new AuthService;
 
