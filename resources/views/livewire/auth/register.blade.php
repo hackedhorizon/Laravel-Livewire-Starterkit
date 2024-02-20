@@ -9,5 +9,10 @@
         <label>
             <button class="mt-2" wire:loading.attr="disabled" wire:target="store">Regisztráció</button>
         </label>
+
+        @error('registration')
+            <br>
+            <p class="text-red-500"> {{ $message }} </p>
+        @enderror
     </form>
 </div>

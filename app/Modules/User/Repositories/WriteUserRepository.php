@@ -24,6 +24,7 @@ class WriteUserRepository implements WriteUserRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    // Todo: change this to use UserDTO
     public function updateUser($id, $data): ?User
     {
         $user = User::find($id);

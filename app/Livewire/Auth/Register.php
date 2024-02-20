@@ -25,15 +25,32 @@ class Register extends Component
         return view('livewire.auth.register');
     }
 
+    /**
+     * Livewire's 'unique' validation queries the database for email/username existence.
+     * To prevent potential abuse, a rate limiter (10 requests/minute) is implemented.
+     * Note: The limiter may be bypassed if an actor registers successfully.
+     * Google's reCAPTCHA adds an extra layer of security against automated
+     * registration attempts, enhancing protection from data fetching attempts.
+     */
+    public function updated(RegistrationService $registrationService)
+    {
+        // Check if rate limited
+        $registrationService->checkIfRateLimited();
+    }
+
     public function store(RegistrationService $registrationService)
     {
         // Validate data
         $this->validate();
 
         // Register user, which includes login and adds a flash message to the session
-        $registrationService->registerUser($this->name, $this->username, $this->email, $this->password);
+        if ($registrationService->registerUser($this->name, $this->username, $this->email, $this->password)) {
 
-        // Return user to the main page
-        return $this->redirect(route('home'), navigate: true);
+            // Return user to the main page
+            return $this->redirect(route('home'), navigate: true);
+        }
+
+        // Registration failed
+        $this->addError('registration', __('auth.can_not_create_user'));
     }
 }

@@ -3,10 +3,15 @@
 namespace App\Modules\Auth\Services;
 
 use App\Modules\Auth\Interfaces\AuthServiceInterface;
+use DanHarrin\LivewireRateLimiting\Exceptions\TooManyRequestsException;
+use DanHarrin\LivewireRateLimiting\WithRateLimiting;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
 class AuthService implements AuthServiceInterface
 {
+    use WithRateLimiting;
+
     /**
      * {@inheritdoc}
      */
@@ -42,8 +47,9 @@ class AuthService implements AuthServiceInterface
      */
     public function onSuccessfulLogin(): void
     {
+        $this->clearRateLimiter();
         session()->regenerate();
-        session()->flash('message', 'Successful login!');
+        session()->flash('message', __('auth.success'));
     }
 
     /**
@@ -51,6 +57,12 @@ class AuthService implements AuthServiceInterface
      */
     public function onFailedLogin(): void
     {
-
+        try {
+            $this->rateLimit(3);
+        } catch (TooManyRequestsException $exception) {
+            throw ValidationException::withMessages([
+                'authentication' => __('auth.throttle', ['seconds' => $exception->secondsUntilAvailable]),
+            ]);
+        }
     }
 }

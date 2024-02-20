@@ -23,6 +23,7 @@ class FailedLoginAttemptListener
      */
     public function handle(Failed $event)
     {
+
         // Set the user_id. If user doesn't exists yet, it will get a default null value.
         $user_id = is_null($event->user) ? null : $event->user->id;
 
@@ -33,12 +34,12 @@ class FailedLoginAttemptListener
 
         // If user exists, we log the failed login attempt.
         $this->failedLoginAttemptService->createFailedLoginAttempt(
-            $user_id, $event->credentials['email'], request()->ip()
+            $user_id, $event->user['email'], request()->ip()
         );
 
         Log::warning('Failed Login Attempt Details:');
         Log::warning('----------------------------------');
-        Log::warning('Email: '.$event->credentials['email']);
+        Log::warning('Email: '.$event->user['email']);
         Log::warning('User ID: '.$event->user['id']);
         Log::warning('IP Address: '.request()->ip());
         Log::warning('----------------------------------');
