@@ -178,6 +178,7 @@ return [
         'gender' => 'neme',
         'group' => 'csoport',
         'hour' => 'óra',
+        'identifier' => 'felhasználónév vagy e-mail cím',
         'image' => 'kép',
         'is_subscribed' => 'elő van fizetve',
         'items' => 'tételeket',

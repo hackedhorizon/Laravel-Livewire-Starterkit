@@ -1,18 +1,34 @@
 <div>
-    <form wire:submit='store' class="max-w-md mx-auto">
+    {{-- User registration form --}}
+    <form wire:submit="store"
+          class="max-w-md mx-auto">
 
+        {{-- Loop through form fields to generate input components --}}
         @foreach (['name' => 50, 'username' => 30, 'email' => 50, 'password' => 300] as $field => $maxlength)
-            <x-forms.input id="{{ $field }}" type="{{ $field === 'password' ? 'password' : 'text' }}"
-                maxlength="{{ $maxlength }}" placeholder="{{ ucfirst($field) }}" variable="{{ $field }}" />
+            {{-- Construct the translation key --}}
+            @php
+                $translationKey = 'validation.attributes.' . $field;
+            @endphp
+
+            {{-- Include reusable input component for each form field --}}
+            <x-forms.input id="{{ $field }}"
+                           type="{{ $field === 'password' ? 'password' : 'text' }}"
+                           maxlength="{{ $maxlength }}"
+                           placeholder="{{ ucfirst(__($translationKey)) }}"
+                           variable="{{ $field }}" />
         @endforeach
 
+        {{-- Submit button with loading state and translated text --}}
         <label>
-            <button class="mt-2" wire:loading.attr="disabled" wire:target="store">Regisztráció</button>
+            <button class="mt-2"
+                    wire:loading.attr="disabled"
+                    wire:target="store">{{ __('Register') }}
+            </button>
         </label>
 
+        {{-- Display registration error message if any --}}
         @error('registration')
-            <br>
-            <p class="text-red-500"> {{ $message }} </p>
+            <p class="text-red-500">{{ $message }}</p>
         @enderror
     </form>
 </div>
