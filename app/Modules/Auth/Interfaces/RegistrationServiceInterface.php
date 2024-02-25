@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\User\Interfaces;
+namespace App\Modules\Auth\Interfaces;
 
 use App\Models\User;
 
@@ -21,11 +21,4 @@ interface RegistrationServiceInterface
      * @return User|null Created user or null if creation fails.
      */
     public function registerUser(string $name, string $username, string $email, string $password): ?User;
-
-    /**
-     * Check if a livewire component is rate-limited.
-     * - not strictly related to livewire components, you can use it freely.
-     * - the default limit is 10 request / second
-     */
-    public function checkIfRateLimited(): void;
 }

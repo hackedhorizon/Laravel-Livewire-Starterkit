@@ -6,7 +6,6 @@ use App\Livewire\Auth\Login;
 use App\Livewire\Auth\Logout;
 use App\Livewire\Home;
 use App\Models\User;
-use App\Modules\Auth\Services\AuthService;
 use Illuminate\Auth\Events\Failed;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Auth;
@@ -14,7 +13,7 @@ use Illuminate\Support\Facades\Event;
 use Livewire\Livewire;
 use Tests\TestCase;
 
-class AuthenticationTest extends TestCase
+class LoginTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -107,9 +106,7 @@ class AuthenticationTest extends TestCase
         // Arrange: Create an instance of the AuthService
         // Act: Simulate a Livewire test scenario where a user attempts login with a username
         // Assert: Verify that authentication is successful, and a success message is flashed to the session
-        $authService = new AuthService;
-
-        $user = User::factory()->create(['username' => 'testusername']);
+        User::factory()->create(['username' => 'testusername']);
 
         Livewire::test(Login::class)
             ->set('identifier', 'testusername')
@@ -126,9 +123,7 @@ class AuthenticationTest extends TestCase
         // Arrange: Create an instance of the AuthService
         // Act: Simulate a test scenario where a user attempts login with an email
         // Assert: Verify that authentication is successful, and a success message is flashed to the session
-        $authService = new AuthService;
-
-        $user = User::factory()->create(['email' => 'test@example.com']);
+        User::factory()->create(['email' => 'test@example.com']);
 
         Livewire::test(Login::class)
             ->set('identifier', 'test@example.com')
@@ -145,8 +140,6 @@ class AuthenticationTest extends TestCase
         // Arrange: Create an instance of the AuthService
         // Act: Simulate a test scenario where a user attempts login with invalid credentials
         // Assert: Verify that authentication fails, and no success message is present in the session
-        $authService = new AuthService;
-
         Livewire::test(Login::class)
             ->set('identifier', 'invalid@example.com')
             ->set('password', 'invalidpassword')

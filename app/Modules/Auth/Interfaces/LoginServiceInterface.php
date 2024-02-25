@@ -2,7 +2,7 @@
 
 namespace App\Modules\Auth\Interfaces;
 
-interface AuthServiceInterface
+interface LoginServiceInterface
 {
     /**
      * Attempt to authenticate the user.
@@ -15,7 +15,6 @@ interface AuthServiceInterface
 
     /**
      * Actions to perform on a successful login.
-     * - Clear the rate-limiter.
      * - Regenerate session ID to avoid session fixation.
      * - Flash success message.
      */
@@ -23,7 +22,6 @@ interface AuthServiceInterface
 
     /**
      * Actions to perform on a failed login attempt.
-     * - Add rate limiter.
      */
     public function onFailedLogin(): void;
 }

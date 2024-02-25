@@ -1,19 +1,15 @@
 <?php
 
-namespace App\Modules\User\Services;
+namespace App\Modules\Auth\Services;
 
 use App\Models\User;
-use App\Modules\User\Interfaces\RegistrationServiceInterface;
-use DanHarrin\LivewireRateLimiting\Exceptions\TooManyRequestsException;
-use DanHarrin\LivewireRateLimiting\WithRateLimiting;
+use App\Modules\Auth\Interfaces\RegistrationServiceInterface;
+use App\Modules\User\Services\WriteUserService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
 
 class RegistrationService implements RegistrationServiceInterface
 {
-    use WithRateLimiting;
-
     public WriteUserService $userService;
 
     public function __construct(WriteUserService $userService)
@@ -26,9 +22,6 @@ class RegistrationService implements RegistrationServiceInterface
      */
     public function registerUser(string $name, string $username, string $email, string $password): ?User
     {
-        // Check if rate limited
-        $this->checkIfRateLimited();
-
         // Hash the password
         $hashedPassword = Hash::make($password);
 
@@ -50,16 +43,5 @@ class RegistrationService implements RegistrationServiceInterface
 
         // User creation failed, return null
         return null;
-    }
-
-    public function checkIfRateLimited(): void
-    {
-        try {
-            $this->rateLimit(10);
-        } catch (TooManyRequestsException $exception) {
-            throw ValidationException::withMessages([
-                'registration' => __('auth.throttle', ['seconds' => $exception->secondsUntilAvailable]),
-            ]);
-        }
     }
 }

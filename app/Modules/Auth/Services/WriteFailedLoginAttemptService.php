@@ -23,7 +23,9 @@ class WriteFailedLoginAttemptService implements WriteFailedLoginAttemptServiceIn
     {
         // Create a LoginAttemptDTO for the new attempt
         $loginAttemptDTO = new LoginAttemptDTO(
-            $user_id, $email_address, $ip_address
+            $user_id,
+            $email_address,
+            $ip_address
         );
 
         // Call the repository method to create the failed login attempt

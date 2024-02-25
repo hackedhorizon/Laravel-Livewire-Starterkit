@@ -18,7 +18,7 @@
             <button class="mt-2" wire:loading.attr="disabled" wire:target="login">Bejelentkezés</button>
         </label>
 
-        @error('authentication')
+        @error('login')
             <br>
             <p class="text-red-500">{{ $message }}</p>
         @enderror

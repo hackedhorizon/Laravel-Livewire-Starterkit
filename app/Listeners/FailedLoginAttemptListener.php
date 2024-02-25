@@ -34,7 +34,9 @@ class FailedLoginAttemptListener
 
         // If user exists, we log the failed login attempt.
         $this->failedLoginAttemptService->createFailedLoginAttempt(
-            $user_id, $event->user['email'], request()->ip()
+            $user_id,
+            $event->user['email'],
+            request()->ip()
         );
 
         Log::warning('Failed Login Attempt Details:');
