@@ -19,12 +19,8 @@
         @endforeach
 
         {{-- Submit button with loading state and translated text --}}
-        <label>
-            <button class="mt-2"
-                    wire:loading.attr="disabled"
-                    wire:target="store">{{ __('Register') }}
-            </button>
-        </label>
+        <x-forms.primary-button target="store"
+                                translation="{{ __('Register') }}" />
 
         {{-- Display registration error message if any --}}
         @error('registration')
