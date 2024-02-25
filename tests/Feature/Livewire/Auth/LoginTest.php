@@ -8,7 +8,6 @@ use App\Livewire\Home;
 use App\Models\User;
 use Illuminate\Auth\Events\Failed;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
 use Livewire\Livewire;
 use Tests\TestCase;
@@ -17,25 +16,39 @@ class LoginTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    /**
+     * Test: Render the login component successfully.
+     *
+     * Steps:
+     *  1. Arrange & Act: Render the login component
+     *  2. Assert: Check that the response status is 200
+     */
     public function test_renders_successfully()
     {
-        // Arrange & Act: Render the login component
-        // Assert: Check that the response status is 200
         Livewire::test(Login::class)
             ->assertStatus(200);
     }
 
-    /** @test */
+    /**
+     * Test: Check if the Livewire component exists on the page.
+     *
+     * Steps:
+     *  1. Arrange & Act: Access the /login page and check if the Livewire component exists
+     *  2. Assert: Ensure that the Livewire component is present on the page
+     */
     public function test_component_exists_on_the_page()
     {
-        // Arrange & Act: Access the /login page and check if the Livewire component exists
-        // Assert: Ensure that the Livewire component is present on the page
         $this->get('/login')
             ->assertSeeLivewire(Login::class);
     }
 
-    /** @test **/
+    /**
+     * Test: User can set fields.
+     *
+     * Steps:
+     *  1. Arrange & Act: Access the /login page and check if the user can set the required fields
+     *  2. Assert: Ensure that fields can be set
+     */
     public function test_user_can_set_fields()
     {
         // Arrange & Act: Access the /login page and check if user can set the required fields
@@ -47,17 +60,21 @@ class LoginTest extends TestCase
             ->assertSet('password', 'password');
     }
 
-    /** @test **/
+    /**
+     * Test: Login validation works.
+     *
+     * Steps:
+     *  1. Test empty values, invalid email, and short password
+     *  2. Test maximum length for identifier
+     */
     public function test_login_validation_works()
     {
-        // Test empty values, invalid email, and short password
         Livewire::test('auth.login')
             ->set('identifier', '') // Test: Empty name
             ->set('password', '1') // Test: Short password
             ->call('login')
             ->assertHasErrors(['identifier', 'password']);
 
-        // Test maximum length for identifier
         Livewire::test('auth.login')
             ->set('identifier', str_repeat('b', 51)) // Test: Username exceeds maximum length
             ->set('password', 'validpassword')
@@ -65,12 +82,17 @@ class LoginTest extends TestCase
             ->assertHasErrors(['identifier']);
     }
 
-    /** @test **/
+    /**
+     * Test: User can login.
+     *
+     * Scenario: A user attempts to login with valid credentials, check if it will redirected and will see the successful login message.
+     *
+     * Steps:
+     *  1. Access the /login page and check if the user can login
+     *  2. Ensure that there are no validation errors and the component redirects to the home route
+     */
     public function test_user_can_login()
     {
-        // Arrange & Act: Access the /login page and check if user can login
-        // Assert: Ensure that there are no validation errors and the component redirects to the home route
-
         $user = User::factory()->create();
 
         Livewire::test('auth.login')
@@ -83,29 +105,44 @@ class LoginTest extends TestCase
         $this->assertAuthenticated();
     }
 
-    /** @test **/
+    /**
+     * Test: Failed login attempt event dispatches.
+     *
+     * Scenario: A user tries to login with an incorrect password, a failed login attempt event dispatches.
+     *
+     * Steps:
+     *  1. Create a fake event to monitor dispatched events
+     *  2. Create a user and attempt to log in with an incorrect password
+     *  3. Ensure that the Failed event is dispatched during the failed login attempt
+     */
     public function test_failed_login_attempt_event_dispatches()
     {
-        // Arrange: Fake the event system to monitor dispatched events
-        // Act: Create a user and attempt to log in with an incorrect password
-        // Assert: Ensure that the Failed event is dispatched during the failed login attempt
         Event::fake();
 
+        $user = User::factory()->create();
+
         Livewire::test('auth.login')
-            ->set('identifier', 'random@user.com')
+            ->set('identifier', $user['email'])
             ->set('password', '123456')
             ->call('login');
 
-        // Assert that the Failed event is dispatched
         Event::assertDispatched(Failed::class);
     }
 
-    /** @test */
-    public function test_it_attempts_login_with_username()
+    /**
+     * Test: User can login with a username.
+     *
+     * Scenario: A user attempts to login with it's username and everything working as expected.
+     *
+     * Steps:
+     *  1. Create a user with a specific email address.
+     *  2. Initialize Livewire test for the Login component.
+     *  3. Set the identifier & the password correctly.
+     *  4. Trigger the login method.
+     *  5. Assert the authentication is successful, and a success message is flashed to the session.
+     */
+    public function test_user_can_login_with_username()
     {
-        // Arrange: Create an instance of the AuthService
-        // Act: Simulate a Livewire test scenario where a user attempts login with a username
-        // Assert: Verify that authentication is successful, and a success message is flashed to the session
         User::factory()->create(['username' => 'testusername']);
 
         Livewire::test(Login::class)
@@ -113,16 +150,24 @@ class LoginTest extends TestCase
             ->set('password', 'password')
             ->call('login');
 
-        $this->assertTrue(Auth::check());
+        $this->assertAuthenticated();
         $this->assertTrue(session()->exists('message'));
     }
 
-    /** @test */
-    public function test_it_attempts_login_with_email()
+    /**
+     * Test: User can login with email.
+     *
+     * Scenario: A user attempts to login with it's email address and everything is working as expected.
+     *
+     * Steps:
+     *  1. Create a user with a specific email address.
+     *  2. Initialize Livewire test for the Login component.
+     *  3. Set the identifier & the password correctly.
+     *  4. Trigger the login method.
+     *  5. Assert the authentication is successful, and a success message is flashed to the session.
+     */
+    public function test_user_can_login_with_email()
     {
-        // Arrange: Create an instance of the AuthService
-        // Act: Simulate a test scenario where a user attempts login with an email
-        // Assert: Verify that authentication is successful, and a success message is flashed to the session
         User::factory()->create(['email' => 'test@example.com']);
 
         Livewire::test(Login::class)
@@ -130,31 +175,71 @@ class LoginTest extends TestCase
             ->set('password', 'password')
             ->call('login');
 
-        $this->assertTrue(Auth::check());
+        $this->assertAuthenticated();
         $this->assertTrue(session()->exists('message'));
     }
 
-    /** @test */
-    public function test_it_handles_failed_login()
+    /**
+     * Test: Application handles failed login.
+     *
+     * Scenario: Trying to log in to a non existing user and check if it's not authenticated.
+     *
+     * Steps:
+     *  1. Initialize Livewire test for the Login component.
+     *  2. Set the identifier & the password to an invalid value (non existing user).
+     *  3. Trigger the login method.
+     *  4. Assert that the user is not authenticated and the successful login message is not generated.
+     */
+    public function test_application_handles_failed_login()
     {
-        // Arrange: Create an instance of the AuthService
-        // Act: Simulate a test scenario where a user attempts login with invalid credentials
-        // Assert: Verify that authentication fails, and no success message is present in the session
         Livewire::test(Login::class)
             ->set('identifier', 'invalid@example.com')
             ->set('password', 'invalidpassword')
             ->call('login');
 
-        $this->assertFalse(Auth::check());
+        $this->assertGuest();
         $this->assertFalse(session()->exists('message'));
     }
 
-    /** @test **/
+    /**
+     * Test: Throttling of too much login attempts.
+     *
+     * Scenario: Simulate multiple login attempts and check if throttling is working as expected.
+     *
+     * Steps:
+     *  1. Initialize Livewire test for the Login component.
+     *  2. Set the user identifier and a valid password.
+     *  3. Trigger the login method multiple times.
+     *  4. Assert that the expected throttle message is present in the Livewire component response.
+     */
+    public function test_component_throttles_login_attempts(): void
+    {
+        Livewire::test(Login::class)
+            ->set('identifier', 'test@example.com')
+            ->set('password', 'your_password') // Set a valid password
+            ->call('login') // Trigger the login method
+            ->call('login') // Additional attempt
+            ->call('login') // Additional attempt
+            ->call('login') // Additional attempt
+            ->assertHasErrors('login');
+    }
+
+    /**
+     * Test: User can not login with wrong password.
+     *
+     * Scenario: Simulate a user attempts to login with wrong password and check if everything working as expected.
+     *
+     * Steps:
+     *  1. Create a user with factory.
+     *  2. Initialize Livewire test for the Login component.
+     *  3. Set the user identifier according to the created user.
+     *  4. Set the user password to an invalid value.
+     *  5. Trigger the login method.
+     *  6. Assert that the error message is present in the Livewire component response and there is no redirect.
+     *  7. Ensure the user is not authenticated.
+     */
     public function test_user_can_not_login_with_wrong_password()
     {
-        // Arrange: Create a user and attempt to log in with an incorrect password
-        // Act: Set the user's email and a wrong password, and call the login method
-        // Assert: Ensure that the login attempt fails, errors are present, and no redirection occurs
         $user = User::factory()->create();
 
         Livewire::test('auth.login')
@@ -164,16 +249,23 @@ class LoginTest extends TestCase
             ->assertHasErrors()
             ->assertNoRedirect();
 
-        // Ensure the user is not authenticated after the failed login attempt
         $this->assertGuest();
     }
 
-    /** @test **/
+    /**
+     * Test: User can logout from the application.
+     *
+     * Scenario: Simulate an authenticated user logging out.
+     *
+     * Steps:
+     *  1. Create a user via factory.
+     *  2. Initialize Livewire test for the Logout component acting as the created user.
+     *  3. Trigger the logout method on the Logout component.
+     *  4. Ensure that the component has no errors and redirects to the home route.
+     *  5. Ensure the user is no longer authenticated after the logout.
+     */
     public function test_user_can_logout()
     {
-        // Arrange: Create a user and simulate authentication
-        // Act: Log the user out using the Logout Livewire component
-        // Assert: Ensure that the logout process has no errors and redirects to the home route
         $user = User::factory()->create();
 
         Livewire::actingAs($user)
@@ -182,7 +274,6 @@ class LoginTest extends TestCase
             ->assertHasNoErrors()
             ->assertRedirect(Home::class);
 
-        // Ensure the user is no longer authenticated after the logout
         $this->assertGuest();
     }
 }
