@@ -38,7 +38,6 @@ jobs:
       - name: Compile assets
         run: |
           npm install
-          npm run dev
           npm run build
 
       - name: Generate key
