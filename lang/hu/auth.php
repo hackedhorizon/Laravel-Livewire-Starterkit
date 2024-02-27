@@ -8,4 +8,5 @@ return [
     'password' => 'A(z) :attribute jelszónak kell, hogy legyen!',
     'throttle' => 'Túl sok próbálkozás. Kérjük próbálja újra :seconds másodperc múlva.',
     'can_not_create_user' => 'Hiba történt a regisztráció során. Kérlek próbáld újra.',
+    'remember_me' => 'Jegyezz meg',
 ];

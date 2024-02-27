@@ -16,9 +16,9 @@
             <a href="{{ route('home') }}" wire:navigate>Főoldal</a>
             @livewire('auth.logout')
         @else
-            <a href="{{ route('home') }}" wire:navigate>Főoldal</a>
-            <a href="{{ route('register') }}" wire:navigate>Regisztráció</a>
-            <a href="{{ route('login') }}" wire:navigate>Bejelentkezés</a>
+            <a href="{{ route('home') }}" wire:navigate>{{ __('Home') }}</a>
+            <a href="{{ route('register') }}" wire:navigate>{{ __('Register') }}</a>
+            <a href="{{ route('login') }}" wire:navigate>{{ __('Login') }}</a>
         @endauth
     </nav>
 

@@ -178,7 +178,7 @@ return [
         'gender' => 'gender',
         'group' => 'group',
         'hour' => 'hour',
-        'identifier' => 'username or e-mail',
+        'identifier' => 'username or email',
         'image' => 'image',
         'is_subscribed' => 'is subscribed',
         'items' => 'items',

@@ -10,7 +10,7 @@ class LoginService implements LoginServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function attemptLogin(string $identifier, string $password): bool
+    public function attemptLogin(string $identifier, string $password, bool $remember): bool
     {
         $credentials = [];
 
@@ -26,7 +26,7 @@ class LoginService implements LoginServiceInterface
             ];
         }
 
-        if (Auth::attempt($credentials)) {
+        if (Auth::attempt($credentials, $remember)) {
             $this->onSuccessfulLogin();
 
             return true;

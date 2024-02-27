@@ -15,6 +15,8 @@ class Login extends Component
     #[Validate('required|string|min:6|max:300')]
     public $password = '';
 
+    public $remember = false;
+
     private RateLimiterService $rateLimiterService;
 
     public function render()
@@ -42,7 +44,7 @@ class Login extends Component
         $this->validate();
 
         // Authentication attempt
-        if ($loginService->attemptLogin($this->identifier, $this->password)) {
+        if ($loginService->attemptLogin($this->identifier, $this->password, $this->remember)) {
 
             // Authentication successful
             $this->rateLimiterService->clearLimiter();

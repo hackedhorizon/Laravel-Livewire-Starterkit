@@ -24,16 +24,23 @@
         @endforeach
 
         {{-- Submit button with loading state and translated text --}}
-        <label>
-            <button class="mt-2"
-                    wire:loading.attr="disabled"
-                    wire:target="login">{{ __('Login') }}
-            </button>
-        </label>
+        <x-forms.primary-button target="login"
+                                translation="{{ __('Login') }}" />
+
+        <!-- Remember Me -->
+        <div class="block mt-4">
+            <label for="remember"
+                   class="inline-flex items-center">
+                <input wire:model.change="remember"
+                       id="remember"
+                       type="checkbox"
+                       class="text-indigo-600 border-gray-300 rounded shadow-sm dark:bg-gray-900 dark:border-gray-700 focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800"
+                       name="remember">
+                <span class="text-sm text-gray-600 ms-2 dark:text-gray-400">{{ __('auth.remember_me') }}</span>
+            </label>
+        </div>
 
         {{-- Display login error message if any --}}
-        @error('login')
-            <p class="text-red-500">{{ $message }}</p>
-        @enderror
+        <x-forms.error attribute="login" />
     </form>
 </div>

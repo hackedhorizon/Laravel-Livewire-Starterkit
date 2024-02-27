@@ -8,4 +8,5 @@ return [
     'password' => 'The password is incorrect.',
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
     'can_not_create_user' => 'Error during user registration. Please try again.',
+    'remember_me' => 'Remember me',
 ];

@@ -1,10 +1,14 @@
 <div>
+    @php
+        $formFields = ['name' => 50, 'username' => 30, 'email' => 50, 'password' => 300];
+    @endphp
+
     {{-- User registration form --}}
     <form wire:submit="store"
           class="max-w-md mx-auto">
 
         {{-- Loop through form fields to generate input components --}}
-        @foreach (['name' => 50, 'username' => 30, 'email' => 50, 'password' => 300] as $field => $maxlength)
+        @foreach ($formFields as $field => $maxlength)
             {{-- Construct the translation key --}}
             @php
                 $translationKey = 'validation.attributes.' . $field;
@@ -22,9 +26,8 @@
         <x-forms.primary-button target="store"
                                 translation="{{ __('Register') }}" />
 
+
         {{-- Display registration error message if any --}}
-        @error('registration')
-            <p class="text-red-500">{{ $message }}</p>
-        @enderror
+        <x-forms.error attribute='registration' />
     </form>
 </div>
