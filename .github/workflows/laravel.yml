@@ -30,6 +30,8 @@ jobs:
       run: |
         mkdir -p database
         touch database/database.sqlite
+    - name: Start application
+      run: ./vendor/bin/sail up -d
     - name: Execute tests (Unit and Feature tests) via PHPUnit
       env:
         DB_CONNECTION: sqlite
