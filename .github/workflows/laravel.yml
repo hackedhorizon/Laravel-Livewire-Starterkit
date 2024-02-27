@@ -33,7 +33,7 @@ jobs:
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
       - name: Update composer dependencies
-        run: composer update
+        run: composer update --no-scripts
 
       - name: Generate key
         run: |
