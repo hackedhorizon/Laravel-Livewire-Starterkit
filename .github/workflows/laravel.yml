@@ -42,7 +42,9 @@ jobs:
         run: cp .env.example .env
 
       - name: Install Dependencies
-        run: composer install --no-ansi --no-interaction --no-progress --no-scripts --optimize-autoloader
+        run: |
+          composer install --no-ansi --no-interaction --no-progress --no-scripts --optimize-autoloader
+          composer update
 
       - name: Generate Laravel key
         run: php artisan key:generate
