@@ -45,6 +45,11 @@ jobs:
         run: |
           composer install --no-ansi --no-interaction --no-progress --no-scripts --optimize-autoloader
 
+      - name: Compile frontend assets
+        run: |
+          npm install
+          npm run build
+
       - name: Generate Laravel key
         run: php artisan key:generate
 
