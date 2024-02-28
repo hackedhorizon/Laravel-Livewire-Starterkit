@@ -38,8 +38,10 @@ class LoginTest extends TestCase
      */
     public function test_component_exists_on_the_page()
     {
+        $this->withoutExceptionHandling();
         Livewire::test(Login::class)
             ->assertSeeLivewire(Login::class);
+        $this->withoutExceptionHandling();
     }
 
     /**
@@ -117,6 +119,7 @@ class LoginTest extends TestCase
      */
     public function test_failed_login_attempt_event_dispatches()
     {
+        $this->withoutExceptionHandling();
         Event::fake();
 
         $user = User::factory()->create();
@@ -143,6 +146,7 @@ class LoginTest extends TestCase
      */
     public function test_user_can_login_with_username()
     {
+        $this->withoutExceptionHandling();
         User::factory()->create(['username' => 'testusername']);
 
         Livewire::test(Login::class)
@@ -168,12 +172,13 @@ class LoginTest extends TestCase
      */
     public function test_user_can_login_with_email()
     {
+        $this->withoutExceptionHandling();
         User::factory()->create(['email' => 'test@example.com']);
 
         Livewire::test(Login::class)
-            ->set('identifier', 'test@example.com')
-            ->set('password', 'password')
-            ->call('login');
+        ->set('identifier', 'test@example.com')
+        ->set('password', 'password')
+        ->call('login');
 
         $this->assertAuthenticated();
         $this->assertTrue(session()->exists('message'));
