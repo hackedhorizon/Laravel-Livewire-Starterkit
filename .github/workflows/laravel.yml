@@ -34,7 +34,7 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.0"
+          php-version: "8.1" # Update the PHP version to 8.1
           extensions: "mbstring, zip, exif, pcntl, pdo, mysql, tokenizer, bcmath, gd, xml, curl"
           coverage: "none"
 
@@ -44,7 +44,6 @@ jobs:
       - name: Install Dependencies
         run: |
           composer install --no-ansi --no-interaction --no-progress --no-scripts --optimize-autoloader
-          composer update
 
       - name: Generate Laravel key
         run: php artisan key:generate
