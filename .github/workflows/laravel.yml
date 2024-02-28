@@ -57,8 +57,8 @@ jobs:
       - name: Generate Laravel key
         run: php artisan key:generate
 
-      - name: Run Database Migrations
-        run: php artisan migrate --force
+      - name: Create Testing Database
+        run: php artisan migrate:fresh --database=mysql_testing --force
 
       - name: Run Database Seeders
         run: php artisan db:seed --force
