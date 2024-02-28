@@ -32,6 +32,9 @@ jobs:
           node-version: 20.11.1
           registry-url: https://registry.npmjs.org/
 
+      - name: Check PHPUnit version
+        run: vendor/bin/phpunit --version
+
       - name: Copy .env
         run: php -r "file_exists('.env') || copy('.env.example', '.env');"
 
