@@ -74,3 +74,5 @@ jobs:
 
       - name: Execute tests (Unit and Feature tests) via PHPUnit
         run: php artisan test
+        env:
+          RUNNING_IN_CI: true
