@@ -53,5 +53,14 @@ jobs:
       - name: Generate Laravel key
         run: php artisan key:generate
 
+      - name: Run Database Migrations
+        run: php artisan migrate --env=testing --force
+
+      - name: Run Database Seeders
+        run: php artisan db:seed --env=testing --force
+
+      - name: Directory Permissions
+        run: chmod -R 777 storage bootstrap/cache
+
       - name: Run Tests
         run: php artisan test
