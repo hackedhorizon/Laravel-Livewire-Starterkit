@@ -41,13 +41,13 @@ jobs:
       - name: Install Dependencies
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
+      - name: Update composer dependencies
+        run: composer update
+
       - name: Install PHPUnit
         run: |
           composer require --dev phpunit/phpunit:^10.5
           composer install
-
-      - name: Update composer dependencies
-        run: composer update
 
       - name: Dump autoload
         run: composer dump-autoload --optimize --no-interaction
