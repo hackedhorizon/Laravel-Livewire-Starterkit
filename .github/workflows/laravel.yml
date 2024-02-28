@@ -53,9 +53,6 @@ jobs:
       - name: Generate Laravel key
         run: php artisan key:generate
 
-      - name: Display MySQL Container Logs
-        run: docker logs laravel-tests_mysql_1
-
       - name: Run Database Migrations
         run: php artisan migrate --force
 
