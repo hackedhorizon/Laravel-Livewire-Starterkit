@@ -38,7 +38,7 @@ class LoginTest extends TestCase
      */
     public function test_component_exists_on_the_page()
     {
-        $this->get('/login')
+        Livewire::test(Login::class)
             ->assertSeeLivewire(Login::class);
     }
 
