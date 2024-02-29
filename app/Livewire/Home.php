@@ -6,8 +6,15 @@ use Livewire\Component;
 
 class Home extends Component
 {
+    private string $pageTitle = '';
+
     public function render()
     {
-        return view('livewire.home');
+        return view('livewire.home')->title($this->pageTitle);
+    }
+
+    public function mount()
+    {
+        $this->pageTitle = __('Home');
     }
 }

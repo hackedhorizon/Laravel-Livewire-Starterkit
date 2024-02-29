@@ -10,18 +10,25 @@ use Livewire\Component;
 class Login extends Component
 {
     #[Validate('required|string|max:50')]
-    public $identifier = '';
+    public string $identifier = '';
 
     #[Validate('required|string|min:6|max:300')]
-    public $password = '';
+    public string $password = '';
 
-    public $remember = false;
+    public bool $remember = false;
 
     private RateLimiterService $rateLimiterService;
 
+    private string $pageTitle = '';
+
     public function render()
     {
-        return view('livewire.auth.login');
+        return view('livewire.auth.login')->title($this->pageTitle);
+    }
+
+    public function mount()
+    {
+        $this->pageTitle = __('Login');
     }
 
     public function boot(RateLimiterService $rateLimiterService)

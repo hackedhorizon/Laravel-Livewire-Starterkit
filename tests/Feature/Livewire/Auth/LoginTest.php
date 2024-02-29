@@ -17,7 +17,9 @@ class LoginTest extends TestCase
     use RefreshDatabase;
 
     const TEST_USERNAME = 'testusername';
+
     const TEST_PASSWORD = 'password';
+
     const TEST_EMAIL    = 'test@email.com';
 
     /**
@@ -111,7 +113,7 @@ class LoginTest extends TestCase
         User::factory()->create([
             'username' => self::TEST_USERNAME,
             'email'    => self::TEST_EMAIL,
-            'password' => self::TEST_PASSWORD
+            'password' => self::TEST_PASSWORD,
         ]);
 
         // Try to login via identifier (either username or email -> data provider)
@@ -124,7 +126,7 @@ class LoginTest extends TestCase
 
         $this->assertAuthenticated();
 
-        $this->assertTrue(session()->exists('message'));
+        $this->assertTrue(session()->exists('message_success'));
     }
 
     public static function loginDataProvider()

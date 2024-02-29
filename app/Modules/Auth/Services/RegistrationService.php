@@ -35,7 +35,7 @@ class RegistrationService implements RegistrationServiceInterface
             Auth::login($user);
 
             // Set flash message for successful registration
-            session()->flash('message', 'Your registration was successful!');
+            session()->flash('message_success', __('register.success'));
 
             // Return user
             return $user;

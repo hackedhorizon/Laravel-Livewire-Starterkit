@@ -27,7 +27,7 @@
                                 translation="{{ __('Register') }}" />
 
 
-        {{-- Display registration error message if any --}}
-        <x-forms.error attribute='registration' />
+        {{-- Display register error message if any --}}
+        <x-forms.error attribute='register' />
     </form>
 </div>

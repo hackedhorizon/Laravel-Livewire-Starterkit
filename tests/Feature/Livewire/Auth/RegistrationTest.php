@@ -13,8 +13,11 @@ class RegistrationTest extends TestCase
     use RefreshDatabase;
 
     const TEST_NAME = 'John Doe';
+
     const TEST_USERNAME = 'johndoe';
+
     const TEST_EMAIL = 'test@example.com';
+
     const TEST_PASSWORD = 'password';
 
     /**

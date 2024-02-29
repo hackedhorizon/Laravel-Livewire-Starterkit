@@ -10,10 +10,13 @@
 </head>
 
 <body>
+
+    {{-- Navbar --}}
+
     <nav>
         @auth
-            Welcome, <strong>{{ Auth::user()->username }}</strong> <br>
-            <a href="{{ route('home') }}" wire:navigate>Főoldal</a>
+            <strong>{{ Auth::user()->username }}</strong> <br>
+            <a href="{{ route('home') }}" wire:navigate>{{ __('Home') }}</a>
             @livewire('auth.logout')
         @else
             <a href="{{ route('home') }}" wire:navigate>{{ __('Home') }}</a>
@@ -22,13 +25,20 @@
         @endauth
     </nav>
 
-    @if (session('message'))
-        <div class="text-white bg-green-500">
-            {{ session('message') }}
-        </div>
-    @endif
+    {{-- Session messages --}}
 
-    {{ $slot }}
+    @session('message_success')
+        <div class="text-white bg-green-500">
+            {{ $value }}
+        </div>
+    @endsession
+
+    {{-- Body --}}
+
+    <main>
+        {{ $slot }}
+    </main>
+
 </body>
 
 </html>

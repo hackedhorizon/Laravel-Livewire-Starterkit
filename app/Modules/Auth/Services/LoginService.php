@@ -43,7 +43,7 @@ class LoginService implements LoginServiceInterface
     public function onSuccessfulLogin(): void
     {
         session()->regenerate();
-        session()->flash('message', __('auth.success'));
+        session()->flash('message_success', __('auth.success'));
     }
 
     /**

@@ -10,22 +10,29 @@ use Livewire\Component;
 class Register extends Component
 {
     #[Validate('required|string|max:50')]
-    public string $name = '';
+    public string $name;
 
     #[Validate('required|string|max:30|unique:users,username')]
-    public string $username = '';
+    public string $username;
 
     #[Validate('required|email|max:50|unique:users,email')]
-    public string $email = '';
+    public string $email;
 
     #[Validate('required|string|min:6|max:300')]
-    public string $password = '';
+    public string $password;
 
     private RateLimiterService $rateLimiterService;
 
+    private string $pageTitle = '';
+
     public function render()
     {
-        return view('livewire.auth.register');
+        return view('livewire.auth.register')->title($this->pageTitle);
+    }
+
+    public function mount()
+    {
+        $this->pageTitle = __('Register');
     }
 
     public function boot(RateLimiterService $rateLimiterService)
@@ -57,11 +64,14 @@ class Register extends Component
         // Register user, which includes login and adds a flash message to the session
         if ($registrationService->registerUser($this->name, $this->username, $this->email, $this->password)) {
 
+            // Clear the rate limiter
+            $this->rateLimiterService->clearLimiter();
+
             // Return user to the main page
             return $this->redirect(route('home'), navigate: true);
         }
 
         // Registration failed
-        $this->addError('registration', __('auth.can_not_create_user'));
+        $this->addError('register', __('register.failed'));
     }
 }
