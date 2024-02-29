@@ -39,8 +39,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           fail-fast: false
 
-      - uses: actions/checkout@v3
-
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
@@ -58,11 +56,6 @@ jobs:
 
       - name: Update composer dependencies
         run: composer update
-
-      - name: Install PHPUnit
-        run: |
-          composer require --dev phpunit/phpunit:^10.5
-          composer install
 
       - name: Dump autoload
         run: composer dump-autoload --optimize --no-interaction
