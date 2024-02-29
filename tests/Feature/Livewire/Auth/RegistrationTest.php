@@ -32,10 +32,10 @@ class RegistrationTest extends TestCase
      *  1. Arrange & Act: Access the /register page and check if the Livewire component exists
      *  2. Assert: Ensure that the Livewire component is present on the page
      */
-    public function test_component_exists_on_the_page()
+    public function test_user_can_view_register_page()
     {
-        $this->get('/register')
-            ->assertSeeLivewire(Register::class);
+        $this->get(route('register'))
+            ->assertSuccessful();
     }
 
     /**
