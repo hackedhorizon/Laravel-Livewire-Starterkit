@@ -28,7 +28,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php-versions: ["8.1", "8.2", "8.3"]
+        php-versions: ["8.2", "8.3"]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -40,6 +40,9 @@ jobs:
           php-version: ${{ matrix.php-versions }}
           extensions: mbstring, dom, fileinfo, mysql
           coverage: xdebug
+
+      - name: Directory Permissions
+        run: chmod -R 777 storage bootstrap/cache
 
       # Local MySQL service in GitHub hosted environments is disabled by default.
       # If you are using it instead of service containers, make sure you start it.
@@ -61,6 +64,17 @@ jobs:
 
       - name: Install Composer dependencies
         run: composer install --no-progress --prefer-dist --optimize-autoloader
+
+      - name: Update composer dependencies
+        run: composer update
+
+      - name: Dump autoload
+        run: composer dump-autoload --optimize --no-interaction
+
+      - name: Compile frontend assets
+        run: |
+          npm install
+          npm run build
 
       - name: Prepare the application
         run: |
