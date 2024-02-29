@@ -8,7 +8,6 @@ use App\Livewire\Home;
 use App\Models\User;
 use Illuminate\Auth\Events\Failed;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
 use Livewire\Livewire;
 use Tests\TestCase;
@@ -155,7 +154,7 @@ class LoginTest extends TestCase
             ->set('password', 'password')
             ->call('login');
 
-        $this->assertTrue(Auth::check());
+        $this->assertAuthenticated();
         $this->assertTrue(session()->exists('message'));
     }
 
