@@ -8,7 +8,16 @@ on:
 
 jobs:
   laravel-tests:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.operating-system }}
+    strategy:
+      matrix:
+        operating-system: ["ubuntu-latest", "windows-latest", "macos-latest"]
+        php-versions: ["8.1", "8.2", "8.3"]
+        phpunit-versions: ["latest"]
+        include:
+          - operating-system: "ubuntu-latest"
+            php-versions: "8.0"
+            phpunit-versions: [9.0, 10.0, 10.5.11]
 
     services:
       mysql:
@@ -21,9 +30,15 @@ jobs:
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
-      - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
+      - name: Setup php
+        uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
         with:
-          php-version: "8.3"
+          php-version: ${{ matrix.php-versions }}
+          tools: phpunit:${{ matrix.phpunit-versions }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          fail-fast: false
+
       - uses: actions/checkout@v3
 
       - name: Set up Node.js
