@@ -23,11 +23,43 @@
         @endforeach
 
         {{-- Submit button with loading state and translated text --}}
-        <x-forms.primary-button target="store"
-                                translation="{{ __('Register') }}" />
+        <div wire:ignore>
 
+            <x-forms.primary-button target="store"
+                                    translation="{{ __('Register') }}"
+                                    class="g-recaptcha"
+                                    data-sitekey="{{ config('services.google_captcha.site_key') }}"
+                                    data-callback='handle'
+                                    data-action='store' />
+
+        </div>
+
+        {{-- Display recaptcha token error if any --}}
+        <x-forms.error attribute='recaptcha' />
 
         {{-- Display register error message if any --}}
         <x-forms.error attribute='register' />
+
+        <div>
+            <p>This site is protected by ReCaptcha and the Google</p>
+            <b><a href="https://policies.google.com/privacy">Privacy Policy</a></b> and
+            <b><a href="https://policies.google.com/terms">Terms of Service</a></b> apply.
+        </div>
+
     </form>
+
+    <script src="https://www.google.com/recaptcha/api.js?render={{ config('services.google_captcha.site_key') }}"></script>
+    <script>
+        function handle(e) {
+            grecaptcha.ready(function() {
+                grecaptcha.execute('{{ config('services.google_captcha.site_key') }}', {
+                        action: 'store'
+                    })
+                    .then(function(token) {
+                        @this.set('recaptchaToken', token);
+                        @this.store()
+                    });
+            })
+        }
+    </script>
 </div>

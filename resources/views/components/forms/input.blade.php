@@ -19,6 +19,7 @@
 <div class="relative">
     {{-- Input field with or without maxlength attribute --}}
     <input id="{{ $id }}"
+           name={{ $id }}
            type="{{ $type }}"
            @if (isset($maxlength)) maxlength="{{ $maxlength }}" @endif
            placeholder="{{ $placeholder }}"

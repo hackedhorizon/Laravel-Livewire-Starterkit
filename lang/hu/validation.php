@@ -147,6 +147,7 @@ return [
     'uppercase' => 'A :attribute-nak nagybetűnek kell lennie.',
     'url' => 'A(z) :attribute érvénytelen link.',
     'uuid' => ':Attribute érvényes UUID-val kell rendelkezzen.',
+    'recaptcha_failed' => 'Hiba történt a "nem vagyok robot" ellenőrzése során. Próbálja újra.',
     'attributes' => [
         'address' => 'cím',
         'affiliate_url' => 'társult URL',

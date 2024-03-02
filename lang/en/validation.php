@@ -147,6 +147,7 @@ return [
     'uppercase' => 'The :attribute field must be uppercase.',
     'url' => 'The :attribute must be a valid URL.',
     'uuid' => 'The :attribute must be a valid UUID.',
+    'recaptcha_failed' => 'Error on captcha verification. Please, refresh the page and try again.',
     'attributes' => [
         'address' => 'address',
         'affiliate_url' => 'affiliate URL',

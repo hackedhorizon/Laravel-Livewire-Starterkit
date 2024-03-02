@@ -5,6 +5,7 @@ namespace Tests\Feature\Livewire\Auth;
 use App\Livewire\Auth\Register;
 use App\Livewire\Home;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Http;
 use Livewire\Livewire;
 use Tests\TestCase;
 
@@ -19,6 +20,8 @@ class RegistrationTest extends TestCase
     const TEST_EMAIL = 'test@example.com';
 
     const TEST_PASSWORD = 'password';
+
+    const TEST_RECAPTCHA_TOKEN = 'valid_recaptcha_token';
 
     /**
      * Test: Render the registration component successfully.
@@ -111,7 +114,7 @@ class RegistrationTest extends TestCase
             ->set('username', self::TEST_USERNAME) // Username fetch attempt 9
             ->set('username', self::TEST_USERNAME) // Username fetch attempt 10
             ->set('username', self::TEST_USERNAME) // Username fetch attempt 11
-            ->assertHasErrors('registration'); // Ensure username fetch attempts are throttled
+            ->assertHasErrors('register'); // Ensure username fetch attempts are throttled
     }
 
     /**
@@ -138,25 +141,86 @@ class RegistrationTest extends TestCase
             ->call('store') // Attempt 9
             ->call('store') // Attempt 10
             ->call('store') // Attempt 11
-            ->assertHasErrors('registration'); // Ensure registration attempts are throttled
+            ->assertHasErrors('register'); // Ensure registration attempts are throttled
     }
 
+
     /**
-     * Test: User can register.
+     * Test: User can register with a valid Recaptcha token.
      *
      * Steps:
-     *  1. Access the /register page and check if the user can register
-     *  2. Ensure that there are no validation errors and the component redirects to the home route
+     *  1. Mock the RecaptchaService response to always return success for testing purposes.
+     *  2. Initialize Livewire test for the Register component with valid user data and Recaptcha token.
+     *  3. Call the 'store' method.
+     *  4. Assert that there are no validation errors for name, username, email, and password.
+     *  5. Assert that the user is redirected to the Home component.
+     *  6. Additional assertions can be added, such as checking that the user was created in the database.
      */
-    public function test_user_can_register()
+    public function test_user_can_register_with_valid_recaptcha()
     {
+        // Mock the RecaptchaService response to always return success for testing purposes
+        Http::fake([
+            'https://www.google.com/recaptcha/api/siteverify*' => Http::response(['success' => true, 'score' => 0.9]),
+        ]);
+
         Livewire::test(Register::class)
-            ->set('name', self::TEST_NAME)
-            ->set('username', self::TEST_USERNAME)
-            ->set('email', self::TEST_EMAIL)
-            ->set('password', self::TEST_PASSWORD)
+            ->set('name',           self::TEST_NAME)
+            ->set('username',       self::TEST_USERNAME)
+            ->set('email',          self::TEST_EMAIL)
+            ->set('password',       self::TEST_PASSWORD)
+            ->set('recaptchaToken', self::TEST_RECAPTCHA_TOKEN)
             ->call('store')
             ->assertHasNoErrors(['name', 'username', 'email', 'password'])
             ->assertRedirect(Home::class);
+
+        // Check the user was created
+        $this->assertDatabaseHas('users', [
+            'name'     => self::TEST_NAME,
+            'username' => self::TEST_USERNAME,
+            'email'    => self::TEST_EMAIL,
+        ]);
+
+        // Note: If this test fails, it might be due to a mismatch in the Recaptcha score threshold.
+        // The Livewire component may have a higher threshold (e.g., 1.0), while the fake HTTP request
+        // score in this test is set to 0.9. Ensure consistency in score thresholds for accurate testing.
+        // If the thresholds differ, the test may fail, preventing the user from being redirected.
+    }
+
+    /**
+     * Test: User registration fails with an invalid Recaptcha token.
+     *
+     * Steps:
+     *  1. Mock the RecaptchaService response to always return failure for testing purposes.
+     *  2. Initialize Livewire test for the Register component with valid user data and an invalid Recaptcha token.
+     *  3. Call the 'store' method.
+     *  4. Assert that there are no validation errors for name, username, email, and password.
+     *  5. Assert that there is a validation error for the Recaptcha field.
+     *  6. Assert that the user is not redirected.
+     *  7. Check that the user was not created in the database.
+     */
+    public function test_user_registration_fails_with_invalid_recaptcha()
+    {
+        // Mock the RecaptchaService response to always return failure for testing purposes
+        Http::fake([
+            'https://www.google.com/recaptcha/api/siteverify*' => Http::response(['success' => false, 'score' => 0.2]),
+        ]);
+
+        Livewire::test(Register::class)
+            ->set('name',           self::TEST_NAME)
+            ->set('username',       self::TEST_USERNAME)
+            ->set('email',          self::TEST_EMAIL)
+            ->set('password',       self::TEST_PASSWORD)
+            ->set('recaptchaToken', self::TEST_RECAPTCHA_TOKEN)
+            ->call('store')
+            ->assertHasNoErrors(['name', 'username', 'email', 'password'])
+            ->assertHasErrors(['recaptcha' => __('validation.recaptcha_failed')])
+            ->assertNoRedirect();
+
+        // Check the user was not created
+        $this->assertDatabaseMissing('users', [
+            'name'     => self::TEST_NAME,
+            'username' => self::TEST_USERNAME,
+            'email'    => self::TEST_EMAIL,
+        ]);
     }
 }

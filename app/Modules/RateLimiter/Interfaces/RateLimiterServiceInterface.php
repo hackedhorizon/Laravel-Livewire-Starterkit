@@ -12,7 +12,7 @@ interface RateLimiterServiceInterface
     public function checkTooManyFailedAttempts(): void;
 
     /**
-     * Set the allowed number of attempts for rate limiting.
+     * Set the allowed number of attempts within a minute for rate limiting.
      */
     public function setAllowedNumberOfAttempts(int $allowedNumberOfAttempts): void;
 
