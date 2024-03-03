@@ -34,39 +34,47 @@ class RateLimiterService implements RateLimiterServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function setDecayOfSeconds(int $decayOfSeconds): void
+    public function setDecayOfSeconds(int $decayOfSeconds): self
     {
         $this->decayOfSeconds = $decayOfSeconds;
+
+        return $this;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setAllowedNumberOfAttempts(int $allowedNumberOfAttempts): void
+    public function setAllowedNumberOfAttempts(int $allowedNumberOfAttempts): self
     {
         $this->allowedNumberOfAttempts = $allowedNumberOfAttempts;
+
+        return $this;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setCallerMethod(string $callerMethod): void
+    public function setCallerMethod(string $callerMethod): self
     {
         $this->callerMethod = $callerMethod;
+
+        return $this;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setErrorMessageAttribute(string $errorMessageAttribute): void
+    public function setErrorMessageAttribute(string $errorMessageAttribute): self
     {
         $this->errorMessageAttribute = $errorMessageAttribute;
+
+        return $this;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function checkTooManyFailedAttempts(): void
+    public function checkTooManyFailedAttempts(): self
     {
         try {
             $this->rateLimit($this->allowedNumberOfAttempts, $this->decayOfSeconds, $this->callerMethod);
@@ -75,6 +83,8 @@ class RateLimiterService implements RateLimiterServiceInterface
                 $this->errorMessageAttribute => __('auth.throttle', ['seconds' => $exception->secondsUntilAvailable]),
             ]);
         }
+
+        return $this;
     }
 
     /**

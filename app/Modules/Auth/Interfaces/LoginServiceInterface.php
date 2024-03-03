@@ -9,7 +9,7 @@ interface LoginServiceInterface
      *
      * @param  string  $identifier  The username or email of the user.
      * @param  string  $password  The user's password.
-     * @param  bool    $remember  Should we remember the user for a longer time.
+     * @param  bool  $remember  Should we remember the user for a longer time.
      * @return bool True if authentication is successful, false otherwise.
      */
     public function attemptLogin(string $identifier, string $password, bool $remember): bool;

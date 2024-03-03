@@ -5,6 +5,7 @@ namespace App\Modules\Auth\Services;
 use App\Models\User;
 use App\Modules\Auth\Interfaces\RegistrationServiceInterface;
 use App\Modules\User\Services\WriteUserService;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -30,6 +31,9 @@ class RegistrationService implements RegistrationServiceInterface
 
         // If user successfully created, log in and set session message
         if ($user) {
+
+            // Dispatch a registration event
+            // event(new Registered($user));
 
             // Login the newly registered user
             Auth::login($user);

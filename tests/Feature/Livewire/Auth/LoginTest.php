@@ -20,7 +20,7 @@ class LoginTest extends TestCase
 
     const TEST_PASSWORD = 'password';
 
-    const TEST_EMAIL    = 'test@email.com';
+    const TEST_EMAIL = 'test@email.com';
 
     /**
      * Test: Render the login component successfully.
@@ -112,7 +112,7 @@ class LoginTest extends TestCase
         // Create a user with default values
         User::factory()->create([
             'username' => self::TEST_USERNAME,
-            'email'    => self::TEST_EMAIL,
+            'email' => self::TEST_EMAIL,
             'password' => self::TEST_PASSWORD,
         ]);
 

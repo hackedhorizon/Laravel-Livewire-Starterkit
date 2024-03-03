@@ -1,9 +1,15 @@
 <div>
     @php
-        $formFields = ['name' => 50, 'username' => 30, 'email' => 50, 'password' => 300];
+        $formFields = [
+            'name' => 50,
+            'username' => 30,
+            'email' => 50,
+            'password' => 300,
+        ];
+        $recaptchaEnabled = config('services.should_have_recaptcha');
+        $siteKey = config('services.google_captcha.site_key');
     @endphp
 
-    {{-- User registration form --}}
     <form wire:submit="register"
           class="max-w-md mx-auto">
 
@@ -13,8 +19,6 @@
             @php
                 $translationKey = 'validation.attributes.' . $field;
             @endphp
-
-            {{-- Include reusable input component for each form field --}}
             <x-forms.input id="{{ $field }}"
                            type="{{ $field === 'password' ? 'password' : 'text' }}"
                            maxlength="{{ $maxlength }}"
@@ -22,41 +26,42 @@
                            variable="{{ $field }}" />
         @endforeach
 
-        {{-- Submit button with loading state and translated text --}}
+        {{-- Submit button --}}
         <div wire:ignore>
-
             <x-forms.primary-button target="register"
                                     translation="{{ __('Register') }}"
-                                    class="g-recaptcha"
-                                    data-sitekey="{{ config('services.google_captcha.site_key') }}"
+                                    class="{{ $recaptchaEnabled ? 'g-recaptcha' : '' }}"
+                                    data-sitekey="{{ $siteKey }}"
                                     data-callback='handle'
                                     data-action='register' />
-
         </div>
+        {{-- Recaptcha section --}}
+        @if ($recaptchaEnabled)
+            {{-- Recaptcha information --}}
+            <x-forms.recaptcha />
 
-        {{-- Display recaptcha information --}}
-        <x-forms.recaptcha />
+            {{-- Recaptcha token error --}}
+            <x-forms.error attribute='recaptcha' />
+        @endif
 
-        {{-- Display recaptcha token error if any --}}
-        <x-forms.error attribute='recaptcha' />
-
-        {{-- Display register error message if any --}}
+        {{-- Register error message --}}
         <x-forms.error attribute='register' />
 
     </form>
 
-    <script src="https://www.google.com/recaptcha/api.js?render={{ config('services.google_captcha.site_key') }}"></script>
-    <script>
-        function handle(e) {
-            grecaptcha.ready(function() {
-                grecaptcha.execute('{{ config('services.google_captcha.site_key') }}', {
+    @if ($recaptchaEnabled)
+        <script src="https://www.google.com/recaptcha/api.js?render={{ $siteKey }}"></script>
+        <script>
+            function handle(e) {
+                grecaptcha.ready(function() {
+                    grecaptcha.execute('{{ $siteKey }}', {
                         action: 'register'
-                    })
-                    .then(function(token) {
+                    }).then(function(token) {
                         @this.set('recaptchaToken', token);
-                        @this.register()
+                        @this.register();
                     });
-            })
-        }
-    </script>
+                })
+            }
+        </script>
+    @endif
 </div>

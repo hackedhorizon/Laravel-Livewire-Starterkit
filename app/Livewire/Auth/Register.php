@@ -10,6 +10,7 @@ use Livewire\Component;
 
 class Register extends Component
 {
+    // Validation rules for form fields
     #[Validate('required|string|max:50')]
     public string $name = '';
 
@@ -22,107 +23,78 @@ class Register extends Component
     #[Validate('required|string|min:6|max:300')]
     public string $password = '';
 
+    // RateLimiterService instance for handling registration rate limiting
     private RateLimiterService $rateLimiterService;
 
+    // RecaptchaService instance for handling Google Recaptcha
     private RecaptchaService $recaptchaService;
 
+    // Recaptcha token received from the frontend
     public ?string $recaptchaToken = null;
 
+    // Page title for rendering
     private string $pageTitle = '';
 
-    /**
-     * Render the Livewire component.
-     *
-     * @return \Illuminate\View\View
-     */
+    // Lifecycle method to render the Livewire component
     public function render()
     {
         return view('livewire.auth.register')->title($this->pageTitle);
     }
 
-    /**
-     * Initialize the component.
-     *
-     * @return void
-     */
+    // Lifecycle method to initialize the component
     public function mount()
     {
         $this->pageTitle = __('Register');
     }
 
-    /**
-     * Boot the component with necessary services.
-     *
-     * @param  RateLimiterService  $rateLimiterService
-     * @param  RecaptchaService  $recaptchaService
-     * @return void
-     */
+    // Lifecycle method to configure necessary services during component boot
     public function boot(RateLimiterService $rateLimiterService, RecaptchaService $recaptchaService)
     {
-        $this->setUpRateLimiterService($rateLimiterService);
-
-        $this->setUpRecaptchaService($recaptchaService);
+        $this->configureRateLimiterService($rateLimiterService);
+        $this->configureRecaptchaService($recaptchaService);
     }
 
-    /**
-     * Set up the Rate Limiter service with configurations.
-     *
-     * @param  RateLimiterService  $rateLimiterService
-     * @return void
-     */
-    private function setUpRateLimiterService(RateLimiterService $rateLimiterService)
-    {
-        $this->rateLimiterService = $rateLimiterService;
-
-        $this->rateLimiterService->setDecayOfSeconds(60);
-
-        $this->rateLimiterService->setCallerMethod('register');
-
-        $this->rateLimiterService->setAllowedNumberOfAttempts(10);
-
-        $this->rateLimiterService->setErrorMessageAttribute('register');
-    }
-
-    /**
-     * Set up the Recaptcha service with configurations.
-     *
-     * @param  RecaptchaService  $recaptchaService
-     * @return void
-     */
-    private function setUpRecaptchaService(RecaptchaService $recaptchaService)
-    {
-        $this->recaptchaService = $recaptchaService;
-
-        $this->recaptchaService->setScoreThreshold(0.5);
-
-        $this->recaptchaService->setErrorMessageAttribute('recaptcha');
-    }
-
-    /**
-     * Handle property updates.
-     *
-     * @param  string  $property
-     * @return void
-     */
+    // Lifecycle method triggered on property updates
     public function updated($property)
     {
         // Check for too many failed attempts if the property is email or username
-        if ($property === 'email' || $property === 'username') {
+        if (in_array($property, ['email', 'username'])) {
             $this->rateLimiterService->checkTooManyFailedAttempts();
         }
 
-        // Set Recaptcha token value in the service if the property is recaptchaToken
-        if ($property === 'recaptchaToken') {
+        // Set Recaptcha token value if the updated property is recaptchaToken and the service is enabled
+        $this->updateRecaptchaToken($property);
+    }
+
+    // Method to update Recaptcha token if the service is enabled
+    private function updateRecaptchaToken($property)
+    {
+        if (config('services.should_have_recaptcha') && $property === 'recaptchaToken') {
             $this->recaptchaService->setRecaptchaToken($this->recaptchaToken);
         }
     }
 
-    /**
-     * Process user registration.
-     *
-     * @param  RegistrationService  $registrationService
-     * @return \Illuminate\Http\RedirectResponse
-     */
+    // Method to configure RateLimiterService with specific settings
+    private function configureRateLimiterService(RateLimiterService $rateLimiterService)
+    {
+        $this->rateLimiterService = $rateLimiterService;
+        $this->rateLimiterService
+            ->setDecayOfSeconds(60)
+            ->setCallerMethod('register')
+            ->setAllowedNumberOfAttempts(10)
+            ->setErrorMessageAttribute('register');
+    }
+
+    // Method to configure RecaptchaService with specific settings
+    private function configureRecaptchaService(RecaptchaService $recaptchaService)
+    {
+        $this->recaptchaService = $recaptchaService;
+        $this->recaptchaService
+            ->setScoreThreshold(0.5)
+            ->setErrorMessageAttribute('recaptcha');
+    }
+
+    // Method to handle user registration
     public function register(RegistrationService $registrationService)
     {
         // Check for too many failed registration attempts
@@ -131,12 +103,13 @@ class Register extends Component
         // Validate form fields
         $this->validate();
 
-        // Validate Recaptcha token
-        $this->recaptchaService->validateRecaptchaToken();
+        // Validate Recaptcha token if the service is enabled
+        if (config('services.should_have_recaptcha')) {
+            $this->recaptchaService->validateRecaptchaToken();
+        }
 
         // Registration attempt
         if ($registrationService->registerUser($this->name, $this->username, $this->email, $this->password)) {
-
             // Clear the rate limiter
             $this->rateLimiterService->clearLimiter();
 

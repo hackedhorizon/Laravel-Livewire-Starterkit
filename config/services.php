@@ -35,4 +35,9 @@ return [
         'site_key' => env('GOOGLE_RECAPTCHA_SITE_KEY'),
         'secret_key' => env('GOOGLE_RECAPTCHA_SECRET_KEY'),
     ],
+
+    'should_verify_email' => env('EMAIL_VERIFICATION'),
+
+    'should_have_recaptcha' => env('GOOGLE_RECAPTCHA'),
+
 ];
