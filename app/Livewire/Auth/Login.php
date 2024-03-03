@@ -33,9 +33,11 @@ class Login extends Component
 
     public function boot(RateLimiterService $rateLimiterService)
     {
-        // Set up the rate limiter service to allow 3 login attempts per minute
-
         $this->rateLimiterService = $rateLimiterService;
+
+        $this->rateLimiterService->setDecayOfSeconds(60);
+
+        $this->rateLimiterService->setCallerMethod('login');
 
         $this->rateLimiterService->setAllowedNumberOfAttempts(3);
 
@@ -44,8 +46,8 @@ class Login extends Component
 
     public function login(LoginService $loginService)
     {
-        // Add rate limit for login attempts
-        $this->rateLimiterService->checkTooManyFailedAttempts();
+        // Check for too many failed login attempts
+        $this->rateLimiterService->checkTooManyFailedAttempts(60, 'login');
 
         // Validate form fields
         $this->validate();
@@ -53,10 +55,10 @@ class Login extends Component
         // Authentication attempt
         if ($loginService->attemptLogin($this->identifier, $this->password, $this->remember)) {
 
-            // Authentication successful
+            // Clear the rate limiter
             $this->rateLimiterService->clearLimiter();
 
-            // Redirect the user to the home route after successful login
+            // Redirect user to the main page
             return $this->redirect(route('home'), navigate: true);
         }
 

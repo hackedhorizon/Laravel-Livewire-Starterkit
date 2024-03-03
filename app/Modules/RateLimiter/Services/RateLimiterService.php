@@ -12,9 +12,19 @@ class RateLimiterService implements RateLimiterServiceInterface
     use WithRateLimiting;
 
     /**
-     * @var int The allowed number of attempts for rate limiting.
+     * @var int The decaying of rate limiter.
+     */
+    private int $decayOfSeconds;
+
+    /**
+     * @var int The allowed number of attempts within the decay of seconds.
      */
     private int $allowedNumberOfAttempts;
+
+    /**
+     * @var string The method which the rate limiter is called from.
+     */
+    private string $callerMethod;
 
     /**
      * @var string The attribute name for the error message.
@@ -24,9 +34,25 @@ class RateLimiterService implements RateLimiterServiceInterface
     /**
      * {@inheritdoc}
      */
+    public function setDecayOfSeconds(int $decayOfSeconds): void
+    {
+        $this->decayOfSeconds = $decayOfSeconds;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function setAllowedNumberOfAttempts(int $allowedNumberOfAttempts): void
     {
         $this->allowedNumberOfAttempts = $allowedNumberOfAttempts;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCallerMethod(string $callerMethod): void
+    {
+        $this->callerMethod = $callerMethod;
     }
 
     /**
@@ -43,7 +69,7 @@ class RateLimiterService implements RateLimiterServiceInterface
     public function checkTooManyFailedAttempts(): void
     {
         try {
-            $this->rateLimit($this->allowedNumberOfAttempts);
+            $this->rateLimit($this->allowedNumberOfAttempts, $this->decayOfSeconds, $this->callerMethod);
         } catch (TooManyRequestsException $exception) {
             throw ValidationException::withMessages([
                 $this->errorMessageAttribute => __('auth.throttle', ['seconds' => $exception->secondsUntilAvailable]),
@@ -56,6 +82,6 @@ class RateLimiterService implements RateLimiterServiceInterface
      */
     public function clearLimiter(): void
     {
-        $this->clearRateLimiter();
+        $this->clearRateLimiter($this->callerMethod);
     }
 }

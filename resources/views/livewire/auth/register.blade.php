@@ -4,7 +4,7 @@
     @endphp
 
     {{-- User registration form --}}
-    <form wire:submit="store"
+    <form wire:submit="register"
           class="max-w-md mx-auto">
 
         {{-- Loop through form fields to generate input components --}}
@@ -25,26 +25,23 @@
         {{-- Submit button with loading state and translated text --}}
         <div wire:ignore>
 
-            <x-forms.primary-button target="store"
+            <x-forms.primary-button target="register"
                                     translation="{{ __('Register') }}"
                                     class="g-recaptcha"
                                     data-sitekey="{{ config('services.google_captcha.site_key') }}"
                                     data-callback='handle'
-                                    data-action='store' />
+                                    data-action='register' />
 
         </div>
+
+        {{-- Display recaptcha information --}}
+        <x-forms.recaptcha />
 
         {{-- Display recaptcha token error if any --}}
         <x-forms.error attribute='recaptcha' />
 
         {{-- Display register error message if any --}}
         <x-forms.error attribute='register' />
-
-        <div>
-            <p>This site is protected by ReCaptcha and the Google</p>
-            <b><a href="https://policies.google.com/privacy">Privacy Policy</a></b> and
-            <b><a href="https://policies.google.com/terms">Terms of Service</a></b> apply.
-        </div>
 
     </form>
 
@@ -53,11 +50,11 @@
         function handle(e) {
             grecaptcha.ready(function() {
                 grecaptcha.execute('{{ config('services.google_captcha.site_key') }}', {
-                        action: 'store'
+                        action: 'register'
                     })
                     .then(function(token) {
                         @this.set('recaptchaToken', token);
-                        @this.store()
+                        @this.register()
                     });
             })
         }

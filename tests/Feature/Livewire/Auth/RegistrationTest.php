@@ -75,7 +75,7 @@ class RegistrationTest extends TestCase
             ->set('username', $username)
             ->set('email', $email)
             ->set('password', $password)
-            ->call('store')
+            ->call('register')
             ->assertHasErrors($expectedErrors);
     }
 
@@ -124,23 +124,23 @@ class RegistrationTest extends TestCase
      *
      * Steps:
      *  1. Initialize Livewire test for the Register component.
-     *  2. Trigger the store method multiple times exceeding the allowed attempts.
+     *  2. Trigger the register method multiple times exceeding the allowed attempts.
      *  3. Assert that the expected throttle message is present in the Livewire component response.
      */
     public function test_component_throttles_registration_attempts(): void
     {
         Livewire::test(Register::class)
-            ->call('store') // Attempt 1
-            ->call('store') // Attempt 2
-            ->call('store') // Attempt 3
-            ->call('store') // Attempt 4
-            ->call('store') // Attempt 5
-            ->call('store') // Attempt 6
-            ->call('store') // Attempt 7
-            ->call('store') // Attempt 8
-            ->call('store') // Attempt 9
-            ->call('store') // Attempt 10
-            ->call('store') // Attempt 11
+            ->call('register') // Attempt 1
+            ->call('register') // Attempt 2
+            ->call('register') // Attempt 3
+            ->call('register') // Attempt 4
+            ->call('register') // Attempt 5
+            ->call('register') // Attempt 6
+            ->call('register') // Attempt 7
+            ->call('register') // Attempt 8
+            ->call('register') // Attempt 9
+            ->call('register') // Attempt 10
+            ->call('register') // Attempt 11
             ->assertHasErrors('register'); // Ensure registration attempts are throttled
     }
 
@@ -151,7 +151,7 @@ class RegistrationTest extends TestCase
      * Steps:
      *  1. Mock the RecaptchaService response to always return success for testing purposes.
      *  2. Initialize Livewire test for the Register component with valid user data and Recaptcha token.
-     *  3. Call the 'store' method.
+     *  3. Call the 'register' method.
      *  4. Assert that there are no validation errors for name, username, email, and password.
      *  5. Assert that the user is redirected to the Home component.
      *  6. Additional assertions can be added, such as checking that the user was created in the database.
@@ -169,7 +169,7 @@ class RegistrationTest extends TestCase
             ->set('email',          self::TEST_EMAIL)
             ->set('password',       self::TEST_PASSWORD)
             ->set('recaptchaToken', self::TEST_RECAPTCHA_TOKEN)
-            ->call('store')
+            ->call('register')
             ->assertHasNoErrors(['name', 'username', 'email', 'password'])
             ->assertRedirect(Home::class);
 
@@ -192,7 +192,7 @@ class RegistrationTest extends TestCase
      * Steps:
      *  1. Mock the RecaptchaService response to always return failure for testing purposes.
      *  2. Initialize Livewire test for the Register component with valid user data and an invalid Recaptcha token.
-     *  3. Call the 'store' method.
+     *  3. Call the 'register' method.
      *  4. Assert that there are no validation errors for name, username, email, and password.
      *  5. Assert that there is a validation error for the Recaptcha field.
      *  6. Assert that the user is not redirected.
@@ -211,7 +211,7 @@ class RegistrationTest extends TestCase
             ->set('email',          self::TEST_EMAIL)
             ->set('password',       self::TEST_PASSWORD)
             ->set('recaptchaToken', self::TEST_RECAPTCHA_TOKEN)
-            ->call('store')
+            ->call('register')
             ->assertHasNoErrors(['name', 'username', 'email', 'password'])
             ->assertHasErrors(['recaptcha' => __('validation.recaptcha_failed')])
             ->assertNoRedirect();

@@ -60,6 +60,7 @@ class Register extends Component
     public function boot(RateLimiterService $rateLimiterService, RecaptchaService $recaptchaService)
     {
         $this->setUpRateLimiterService($rateLimiterService);
+
         $this->setUpRecaptchaService($recaptchaService);
     }
 
@@ -72,7 +73,13 @@ class Register extends Component
     private function setUpRateLimiterService(RateLimiterService $rateLimiterService)
     {
         $this->rateLimiterService = $rateLimiterService;
+
+        $this->rateLimiterService->setDecayOfSeconds(60);
+
+        $this->rateLimiterService->setCallerMethod('register');
+
         $this->rateLimiterService->setAllowedNumberOfAttempts(10);
+
         $this->rateLimiterService->setErrorMessageAttribute('register');
     }
 
@@ -85,7 +92,9 @@ class Register extends Component
     private function setUpRecaptchaService(RecaptchaService $recaptchaService)
     {
         $this->recaptchaService = $recaptchaService;
+
         $this->recaptchaService->setScoreThreshold(0.5);
+
         $this->recaptchaService->setErrorMessageAttribute('recaptcha');
     }
 
@@ -114,18 +123,18 @@ class Register extends Component
      * @param  RegistrationService  $registrationService
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(RegistrationService $registrationService)
+    public function register(RegistrationService $registrationService)
     {
         // Check for too many failed registration attempts
         $this->rateLimiterService->checkTooManyFailedAttempts();
 
-        // Validate form inputs
+        // Validate form fields
         $this->validate();
 
         // Validate Recaptcha token
         $this->recaptchaService->validateRecaptchaToken();
 
-        // Register user and handle success/failure
+        // Registration attempt
         if ($registrationService->registerUser($this->name, $this->username, $this->email, $this->password)) {
 
             // Clear the rate limiter
