@@ -19,7 +19,7 @@ class ReadUserRepository implements ReadUserRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getUserById($id): ?User
+    public function findUserById($id): ?User
     {
         return User::find($id);
     }

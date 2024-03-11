@@ -25,7 +25,7 @@ interface ReadUserRepositoryInterface
      * @param  int  $id  User ID.
      * @return User|null The user instance if found, otherwise null.
      */
-    public function getUserById($id): ?User;
+    public function findUserById($id): ?User;
 
     /**
      * Find a user by their username or email address.

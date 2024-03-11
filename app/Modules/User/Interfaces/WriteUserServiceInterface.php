@@ -18,9 +18,9 @@ interface WriteUserServiceInterface
      * @param  string  $username  User's username.
      * @param  string  $email  User's email.
      * @param  string  $password  User's password.
-     * @return User|null Created user or null if creation fails.
+     * @return User Created user.
      */
-    public function createUser($name, $username, $email, $password): ?User;
+    public function createUser($name, $username, $email, $password): User;
 
     /**
      * Update an existing user.

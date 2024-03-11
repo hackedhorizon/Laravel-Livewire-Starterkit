@@ -23,9 +23,9 @@ interface ReadUserServiceInterface
      * Get a user by their ID.
      *
      * @param  int  $id  User ID.
-     * @return array|null User data or null if the user is not found.
+     * @return User|null User object or null if the user is not found.
      */
-    public function getUserById($id): ?User;
+    public function findUserById($id): ?User;
 
     /**
      * Find a user by their username or email address.

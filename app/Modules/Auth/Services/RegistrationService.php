@@ -6,12 +6,11 @@ use App\Models\User;
 use App\Modules\Auth\Interfaces\RegistrationServiceInterface;
 use App\Modules\User\Services\WriteUserService;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class RegistrationService implements RegistrationServiceInterface
 {
-    public WriteUserService $userService;
+    private WriteUserService $userService;
 
     public function __construct(WriteUserService $userService)
     {
@@ -29,23 +28,12 @@ class RegistrationService implements RegistrationServiceInterface
         // Create a new user with the provided data
         $user = $this->userService->createUser($name, $username, $email, $hashedPassword);
 
-        // If user successfully created, log in and set session message
-        if ($user) {
-
-            // Dispatch a registration event
-            // event(new Registered($user));
-
-            // Login the newly registered user
-            Auth::login($user);
-
-            // Set flash message for successful registration
-            session()->flash('message_success', __('register.success'));
-
-            // Return user
-            return $user;
+        // Dispatch a successful registration event -> automatically sends out an email verification link to the user
+        if (config('services.should_verify_email')) {
+            event(new Registered($user));
         }
 
-        // User creation failed, return null
-        return null;
+        // Return the registered user object
+        return $user;
     }
 }

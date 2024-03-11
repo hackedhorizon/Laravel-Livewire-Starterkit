@@ -169,6 +169,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\RecaptchaServiceProvider::class,
+        App\Providers\EmailVerificationServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
     ])->toArray(),
 
