@@ -35,6 +35,7 @@
                                     data-callback='handle'
                                     data-action='register' />
         </div>
+
         {{-- Recaptcha section --}}
         @if ($recaptchaEnabled)
             {{-- Recaptcha information --}}
@@ -43,9 +44,6 @@
             {{-- Recaptcha token error --}}
             <x-forms.error attribute='recaptcha' />
         @endif
-
-        {{-- Register error message --}}
-        <x-forms.error attribute='register' />
 
     </form>
 

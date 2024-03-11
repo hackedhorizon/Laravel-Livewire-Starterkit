@@ -19,7 +19,7 @@ class WriteUserService implements WriteUserServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function createUser($name, $username, $email, $password): ?User
+    public function createUser($name, $username, $email, $password): User
     {
         $userDto = new UserDTO($name, $username, $email, $password);
 

@@ -2,9 +2,11 @@
 
 namespace Tests\Feature\Livewire\Auth;
 
+use App\Livewire\Auth\EmailVerification;
 use App\Livewire\Auth\Register;
 use App\Livewire\Home;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
 use Livewire\Livewire;
 use Tests\TestCase;
@@ -35,9 +37,6 @@ class RegistrationTest extends TestCase
         Livewire::test(Register::class)
             ->assertStatus(200);
     }
-
-    /**
-     * ... (other tests remain unchanged)
 
     /**
      * Test: User can set fields.
@@ -161,14 +160,25 @@ class RegistrationTest extends TestCase
             $this->markTestSkipped('Recaptcha is enabled in the configuration.');
         }
 
-        Livewire::test(Register::class)
-            ->set('name', self::TEST_NAME)
-            ->set('username', self::TEST_USERNAME)
-            ->set('email', self::TEST_EMAIL)
-            ->set('password', self::TEST_PASSWORD)
-            ->call('register')
-            ->assertHasNoErrors(['name', 'username', 'email', 'password'])
-            ->assertRedirect(Home::class);
+        if (config('services.should_verify_email')) {
+            Livewire::test(Register::class)
+                ->set('name', self::TEST_NAME)
+                ->set('username', self::TEST_USERNAME)
+                ->set('email', self::TEST_EMAIL)
+                ->set('password', self::TEST_PASSWORD)
+                ->call('register')
+                ->assertHasNoErrors(['name', 'username', 'email', 'password'])
+                ->assertRedirect(EmailVerification::class);
+        } else {
+            Livewire::test(Register::class)
+                ->set('name', self::TEST_NAME)
+                ->set('username', self::TEST_USERNAME)
+                ->set('email', self::TEST_EMAIL)
+                ->set('password', self::TEST_PASSWORD)
+                ->call('register')
+                ->assertHasNoErrors(['name', 'username', 'email', 'password'])
+                ->assertRedirect(Home::class);
+        }
     }
 
     /**
@@ -185,7 +195,7 @@ class RegistrationTest extends TestCase
      */
     public function test_user_can_register_with_valid_recaptcha()
     {
-        if (!config('services.should_have_recaptcha')) {
+        if (! config('services.should_have_recaptcha')) {
             $this->markTestSkipped('Recaptcha is not enabled in the configuration.');
         }
 
@@ -194,21 +204,33 @@ class RegistrationTest extends TestCase
             'https://www.google.com/recaptcha/api/siteverify*' => Http::response(['success' => true, 'score' => 0.9]),
         ]);
 
-        Livewire::test(Register::class)
-            ->set('name',           self::TEST_NAME)
-            ->set('username',       self::TEST_USERNAME)
-            ->set('email',          self::TEST_EMAIL)
-            ->set('password',       self::TEST_PASSWORD)
-            ->set('recaptchaToken', self::TEST_RECAPTCHA_TOKEN)
-            ->call('register')
-            ->assertHasNoErrors(['name', 'username', 'email', 'password'])
-            ->assertRedirect(Home::class);
+        if (config('services.should_verify_email')) {
+            Livewire::test(Register::class)
+                ->set('name', self::TEST_NAME)
+                ->set('username', self::TEST_USERNAME)
+                ->set('email', self::TEST_EMAIL)
+                ->set('password', self::TEST_PASSWORD)
+                ->set('recaptchaToken', self::TEST_RECAPTCHA_TOKEN)
+                ->call('register')
+                ->assertHasNoErrors(['name', 'username', 'email', 'password'])
+                ->assertRedirect(EmailVerification::class);
+        } else {
+            Livewire::test(Register::class)
+                ->set('name', self::TEST_NAME)
+                ->set('username', self::TEST_USERNAME)
+                ->set('email', self::TEST_EMAIL)
+                ->set('password', self::TEST_PASSWORD)
+                ->set('recaptchaToken', self::TEST_RECAPTCHA_TOKEN)
+                ->call('register')
+                ->assertHasNoErrors(['name', 'username', 'email', 'password'])
+                ->assertRedirect(Home::class);
+        }
 
         // Check the user was created
         $this->assertDatabaseHas('users', [
-            'name'     => self::TEST_NAME,
+            'name' => self::TEST_NAME,
             'username' => self::TEST_USERNAME,
-            'email'    => self::TEST_EMAIL,
+            'email' => self::TEST_EMAIL,
         ]);
 
         // Note: If this test fails, it might be due to a mismatch in the Recaptcha score threshold.
@@ -232,7 +254,7 @@ class RegistrationTest extends TestCase
      */
     public function test_user_can_not_register_with_invalid_recaptcha()
     {
-        if (!config('services.should_have_recaptcha')) {
+        if (! config('services.should_have_recaptcha')) {
             $this->markTestSkipped('Recaptcha is not enabled in the configuration.');
         }
 
@@ -242,10 +264,10 @@ class RegistrationTest extends TestCase
         ]);
 
         Livewire::test(Register::class)
-            ->set('name',           self::TEST_NAME)
-            ->set('username',       self::TEST_USERNAME)
-            ->set('email',          self::TEST_EMAIL)
-            ->set('password',       self::TEST_PASSWORD)
+            ->set('name', self::TEST_NAME)
+            ->set('username', self::TEST_USERNAME)
+            ->set('email', self::TEST_EMAIL)
+            ->set('password', self::TEST_PASSWORD)
             ->set('recaptchaToken', self::TEST_RECAPTCHA_TOKEN)
             ->call('register')
             ->assertHasNoErrors(['name', 'username', 'email', 'password'])
@@ -254,9 +276,9 @@ class RegistrationTest extends TestCase
 
         // Check the user was not created
         $this->assertDatabaseMissing('users', [
-            'name'     => self::TEST_NAME,
+            'name' => self::TEST_NAME,
             'username' => self::TEST_USERNAME,
-            'email'    => self::TEST_EMAIL,
+            'email' => self::TEST_EMAIL,
         ]);
     }
 }

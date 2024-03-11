@@ -5,12 +5,12 @@ namespace App\Livewire\Auth;
 use App\Modules\Auth\Services\RecaptchaService;
 use App\Modules\Auth\Services\RegistrationService;
 use App\Modules\RateLimiter\Services\RateLimiterService;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
 class Register extends Component
 {
-    // Validation rules for form fields
     #[Validate('required|string|max:50')]
     public string $name = '';
 
@@ -23,39 +23,46 @@ class Register extends Component
     #[Validate('required|string|min:6|max:300')]
     public string $password = '';
 
-    // RateLimiterService instance for handling registration rate limiting
     private RateLimiterService $rateLimiterService;
 
-    // RecaptchaService instance for handling Google Recaptcha
     private RecaptchaService $recaptchaService;
 
-    // Recaptcha token received from the frontend
+    private bool $emailVerificationServiceEnabled = false;
+
+    private bool $recaptchaServiceEnabled = false;
+
     public ?string $recaptchaToken = null;
 
-    // Page title for rendering
     private string $pageTitle = '';
 
-    // Lifecycle method to render the Livewire component
     public function render()
     {
         return view('livewire.auth.register')->title($this->pageTitle);
     }
 
-    // Lifecycle method to initialize the component
     public function mount()
     {
         $this->pageTitle = __('Register');
     }
 
-    // Lifecycle method to configure necessary services during component boot
-    public function boot(RateLimiterService $rateLimiterService, RecaptchaService $recaptchaService)
-    {
+    public function boot(
+        RateLimiterService $rateLimiterService,
+        RecaptchaService $recaptchaService,
+    ) {
         $this->configureRateLimiterService($rateLimiterService);
         $this->configureRecaptchaService($recaptchaService);
+
+        // Get the configuration settings
+        $this->recaptchaServiceEnabled = config('services.should_have_recaptcha');
+        $this->emailVerificationServiceEnabled = config('services.should_verify_email');
     }
 
-    // Lifecycle method triggered on property updates
     public function updated($property)
+    {
+        $this->checkFailedAttemptsAndRecaptcha($property);
+    }
+
+    private function checkFailedAttemptsAndRecaptcha($property)
     {
         // Check for too many failed attempts if the property is email or username
         if (in_array($property, ['email', 'username'])) {
@@ -66,17 +73,17 @@ class Register extends Component
         $this->updateRecaptchaToken($property);
     }
 
-    // Method to update Recaptcha token if the service is enabled
     private function updateRecaptchaToken($property)
     {
-        if (config('services.should_have_recaptcha') && $property === 'recaptchaToken') {
+        // If the recaptcha token updates on the frontend, update on the backend (recaptcha service) as well
+        if ($this->recaptchaServiceEnabled && $property === 'recaptchaToken') {
             $this->recaptchaService->setRecaptchaToken($this->recaptchaToken);
         }
     }
 
-    // Method to configure RateLimiterService with specific settings
     private function configureRateLimiterService(RateLimiterService $rateLimiterService)
     {
+        // Configure the rate limiter service to allow 10 requests / minute on calling the register method
         $this->rateLimiterService = $rateLimiterService;
         $this->rateLimiterService
             ->setDecayOfSeconds(60)
@@ -85,39 +92,57 @@ class Register extends Component
             ->setErrorMessageAttribute('register');
     }
 
-    // Method to configure RecaptchaService with specific settings
     private function configureRecaptchaService(RecaptchaService $recaptchaService)
     {
+        // Configure the recaptcha service and set the score threshold to 0.5
         $this->recaptchaService = $recaptchaService;
         $this->recaptchaService
             ->setScoreThreshold(0.5)
             ->setErrorMessageAttribute('recaptcha');
     }
 
-    // Method to handle user registration
     public function register(RegistrationService $registrationService)
     {
-        // Check for too many failed registration attempts
+        // Clear the rate limiter & validation
         $this->rateLimiterService->checkTooManyFailedAttempts();
-
-        // Validate form fields
         $this->validate();
+        $this->validateRecaptcha();
 
-        // Validate Recaptcha token if the service is enabled
-        if (config('services.should_have_recaptcha')) {
+        // Create user
+        $user = $registrationService->registerUser($this->name, $this->username, $this->email, $this->password);
+
+        // Handle creation
+        $this->handleSuccessfulRegistration($user);
+
+    }
+
+    private function validateRecaptcha()
+    {
+        // Validate recaptcha token
+        if ($this->recaptchaServiceEnabled) {
             $this->recaptchaService->validateRecaptchaToken();
         }
+    }
 
-        // Registration attempt
-        if ($registrationService->registerUser($this->name, $this->username, $this->email, $this->password)) {
-            // Clear the rate limiter
-            $this->rateLimiterService->clearLimiter();
+    private function handleSuccessfulRegistration($user)
+    {
+        // Add success message to the flash
+        session()->flash('message_success', __('register.success'));
 
-            // Redirect user to the main page
-            return $this->redirect(route('home'), navigate: true);
+        // Clear rate limiter
+        $this->rateLimiterService->clearLimiter();
+
+        // Log in the user
+        Auth::login($user);
+
+        // If the email verification enabled, notify the user from the sent verification email
+        if ($this->emailVerificationServiceEnabled) {
+            session()->flash('message_success', __('register.verification_email_sent'));
+
+            return $this->redirect(route('verification.notice'), navigate: true);
         }
 
-        // Registration failed
-        $this->addError('register', __('register.failed'));
+        // Redirect user to the home page
+        return $this->redirect(route('home'), navigate: true);
     }
 }
