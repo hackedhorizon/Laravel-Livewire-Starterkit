@@ -10,12 +10,13 @@
 </head>
 
 <body>
+    <x-notifications.verify-email-notification />
 
     {{-- Navbar --}}
 
     <nav>
         @auth
-            <strong>{{ Auth::user()->username }}</strong> <br>
+            <strong>{{ __('register.welcome') }}, {{ Auth::user()->username }}!</strong> <br>
             <a href="{{ route('home') }}" wire:navigate>{{ __('Home') }}</a>
             @livewire('auth.logout')
         @else
@@ -24,6 +25,7 @@
             <a href="{{ route('login') }}" wire:navigate>{{ __('Login') }}</a>
         @endauth
     </nav>
+
 
     {{-- Session messages --}}
 

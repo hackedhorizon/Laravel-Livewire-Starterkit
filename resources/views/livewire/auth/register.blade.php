@@ -28,12 +28,12 @@
 
         {{-- Submit button --}}
         <div wire:ignore>
-            <x-forms.primary-button target="register"
-                                    translation="{{ __('Register') }}"
-                                    class="{{ $recaptchaEnabled ? 'g-recaptcha' : '' }}"
-                                    data-sitekey="{{ $siteKey }}"
-                                    data-callback='handle'
-                                    data-action='register' />
+            <x-buttons.primary-button target="register"
+                                      translation="{{ __('Register') }}"
+                                      class="{{ $recaptchaEnabled ? 'g-recaptcha' : '' }}"
+                                      data-sitekey="{{ $siteKey }}"
+                                      data-callback='handle'
+                                      data-action='register' />
         </div>
 
         {{-- Recaptcha section --}}
@@ -44,6 +44,9 @@
             {{-- Recaptcha token error --}}
             <x-forms.error attribute='recaptcha' />
         @endif
+
+        {{-- Register error message --}}
+        <x-forms.error attribute='register' />
 
     </form>
 

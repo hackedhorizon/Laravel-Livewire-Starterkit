@@ -1,1 +1,2 @@
-<button wire:click='logout'>Kijelentkezés</button>
+<x-buttons.primary-button click="logout"
+                          translation="{{ __('Logout') }}" />

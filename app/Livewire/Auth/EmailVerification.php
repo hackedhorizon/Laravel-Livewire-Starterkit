@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Auth;
 
-use App\Modules\EmailVerification\Services\EmailVerificationService;
+use App\Modules\Registration\Services\EmailVerificationService;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
