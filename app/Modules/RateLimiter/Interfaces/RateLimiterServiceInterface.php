@@ -2,6 +2,11 @@
 
 namespace App\Modules\RateLimiter\Interfaces;
 
+/**
+ * Interface RateLimiterServiceInterface
+ *
+ * Represents an interface for rate limiting.
+ */
 interface RateLimiterServiceInterface
 {
     /**

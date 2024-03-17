@@ -22,9 +22,9 @@
            name={{ $id }}
            type="{{ $type }}"
            @if (isset($maxlength)) maxlength="{{ $maxlength }}" @endif
-           placeholder="{{ $placeholder }}"
+           @if (isset($placeholder)) placeholder="{{ $placeholder }}" @endif
            wire:model.blur="{{ $variable }}"
-           class="w-full p-2 mt-2 border border-gray-300"
+           {{ $attributes->merge(['class' => 'w-full p-2 mt-2 border border-gray-300']) }}
            autofocus
            autocomplete="{{ $variable }}">
 
@@ -36,7 +36,6 @@
     @endif
 
     {{-- Display Livewire validation error message --}}
-    @error($variable)
-        <p class="text-red-600">{{ $message }}</p>
-    @enderror
+    <x-forms.error attribute='{{ $variable }}' />
+
 </div>

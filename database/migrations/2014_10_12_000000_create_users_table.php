@@ -18,6 +18,7 @@ return new class() extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->char('language', 2)->default(config('app.fallback_locale'));
             $table->rememberToken();
             $table->timestamps();
         });

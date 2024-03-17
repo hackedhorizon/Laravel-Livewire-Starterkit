@@ -6,7 +6,6 @@ use App\Livewire\Auth\EmailVerification;
 use App\Livewire\Auth\Register;
 use App\Livewire\Home;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
 use Livewire\Livewire;
 use Tests\TestCase;
@@ -101,19 +100,17 @@ class RegistrationTest extends TestCase
      */
     public function test_component_throttles_username_fetch_attempts(): void
     {
-        Livewire::test(Register::class)
-            ->set('username', self::TEST_USERNAME) // Username fetch attempt 1
-            ->set('username', self::TEST_USERNAME) // Username fetch attempt 2
-            ->set('username', self::TEST_USERNAME) // Username fetch attempt 3
-            ->set('username', self::TEST_USERNAME) // Username fetch attempt 4
-            ->set('username', self::TEST_USERNAME) // Username fetch attempt 5
-            ->set('username', self::TEST_USERNAME) // Username fetch attempt 6
-            ->set('username', self::TEST_USERNAME) // Username fetch attempt 7
-            ->set('username', self::TEST_USERNAME) // Username fetch attempt 8
-            ->set('username', self::TEST_USERNAME) // Username fetch attempt 9
-            ->set('username', self::TEST_USERNAME) // Username fetch attempt 10
-            ->set('username', self::TEST_USERNAME) // Username fetch attempt 11
-            ->assertHasErrors('register'); // Ensure username fetch attempts are throttled
+        $maxAttempts = 11;
+        $username = self::TEST_USERNAME;
+
+        $registerTest = Livewire::test(Register::class);
+
+        // Simulate multiple attempts to set the username
+        for ($attempt = 1; $attempt <= $maxAttempts; $attempt++) {
+            $registerTest->set('username', $username); // Username fetch attempt
+        }
+
+        $registerTest->assertHasErrors('register'); // Ensure username fetch attempts are throttled
     }
 
     /**
@@ -128,19 +125,17 @@ class RegistrationTest extends TestCase
      */
     public function test_component_throttles_registration_attempts(): void
     {
-        Livewire::test(Register::class)
-            ->call('register') // Attempt 1
-            ->call('register') // Attempt 2
-            ->call('register') // Attempt 3
-            ->call('register') // Attempt 4
-            ->call('register') // Attempt 5
-            ->call('register') // Attempt 6
-            ->call('register') // Attempt 7
-            ->call('register') // Attempt 8
-            ->call('register') // Attempt 9
-            ->call('register') // Attempt 10
-            ->call('register') // Attempt 11
-            ->assertHasErrors('register'); // Ensure registration attempts are throttled
+        $maxAttempts = 11;
+
+        $registerTest = Livewire::test(Register::class);
+
+        // Simulate multiple registration attempts exceeding the allowed attempts
+        for ($attempt = 1; $attempt <= $maxAttempts; $attempt++) {
+            $registerTest->call('register'); // Attempt
+        }
+
+        // Assert that the expected throttle message is present in the Livewire component response
+        $registerTest->assertHasErrors('register'); // Ensure registration attempts are throttled
     }
 
     /**
@@ -151,7 +146,7 @@ class RegistrationTest extends TestCase
      *  2. Initialize Livewire test for the Register component with valid user data.
      *  3. Call the 'register' method.
      *  4. Assert that there are no validation errors for name, username, email, and password.
-     *  5. Assert that the user is redirected to the Home component.
+     *  5. Assert the redirection based on the email verification configuration.
      *  6. Additional assertions can be added, such as checking that the user was created in the database.
      */
     public function test_user_can_register()
@@ -160,24 +155,18 @@ class RegistrationTest extends TestCase
             $this->markTestSkipped('Recaptcha is enabled in the configuration.');
         }
 
+        $registerTest = Livewire::test(Register::class)
+            ->set('name', self::TEST_NAME)
+            ->set('username', self::TEST_USERNAME)
+            ->set('email', self::TEST_EMAIL)
+            ->set('password', self::TEST_PASSWORD)
+            ->call('register')
+            ->assertHasNoErrors(['name', 'username', 'email', 'password']);
+
         if (config('services.should_verify_email')) {
-            Livewire::test(Register::class)
-                ->set('name', self::TEST_NAME)
-                ->set('username', self::TEST_USERNAME)
-                ->set('email', self::TEST_EMAIL)
-                ->set('password', self::TEST_PASSWORD)
-                ->call('register')
-                ->assertHasNoErrors(['name', 'username', 'email', 'password'])
-                ->assertRedirect(EmailVerification::class);
+            $registerTest->assertRedirect(EmailVerification::class);
         } else {
-            Livewire::test(Register::class)
-                ->set('name', self::TEST_NAME)
-                ->set('username', self::TEST_USERNAME)
-                ->set('email', self::TEST_EMAIL)
-                ->set('password', self::TEST_PASSWORD)
-                ->call('register')
-                ->assertHasNoErrors(['name', 'username', 'email', 'password'])
-                ->assertRedirect(Home::class);
+            $registerTest->assertRedirect(Home::class);
         }
     }
 
@@ -190,7 +179,7 @@ class RegistrationTest extends TestCase
      *  3. Initialize Livewire test for the Register component with valid user data and Recaptcha token.
      *  4. Call the 'register' method.
      *  5. Assert that there are no validation errors for name, username, email, and password.
-     *  6. Assert that the user is redirected to the Home component.
+     *  6. Assert the redirection based on the email verification configuration.
      *  7. Additional assertions can be added, such as checking that the user was created in the database.
      */
     public function test_user_can_register_with_valid_recaptcha()
@@ -204,26 +193,19 @@ class RegistrationTest extends TestCase
             'https://www.google.com/recaptcha/api/siteverify*' => Http::response(['success' => true, 'score' => 0.9]),
         ]);
 
+        $registerTest = Livewire::test(Register::class)
+            ->set('name', self::TEST_NAME)
+            ->set('username', self::TEST_USERNAME)
+            ->set('email', self::TEST_EMAIL)
+            ->set('password', self::TEST_PASSWORD)
+            ->set('recaptchaToken', self::TEST_RECAPTCHA_TOKEN)
+            ->call('register')
+            ->assertHasNoErrors(['name', 'username', 'email', 'password']);
+
         if (config('services.should_verify_email')) {
-            Livewire::test(Register::class)
-                ->set('name', self::TEST_NAME)
-                ->set('username', self::TEST_USERNAME)
-                ->set('email', self::TEST_EMAIL)
-                ->set('password', self::TEST_PASSWORD)
-                ->set('recaptchaToken', self::TEST_RECAPTCHA_TOKEN)
-                ->call('register')
-                ->assertHasNoErrors(['name', 'username', 'email', 'password'])
-                ->assertRedirect(EmailVerification::class);
+            $registerTest->assertRedirect(EmailVerification::class);
         } else {
-            Livewire::test(Register::class)
-                ->set('name', self::TEST_NAME)
-                ->set('username', self::TEST_USERNAME)
-                ->set('email', self::TEST_EMAIL)
-                ->set('password', self::TEST_PASSWORD)
-                ->set('recaptchaToken', self::TEST_RECAPTCHA_TOKEN)
-                ->call('register')
-                ->assertHasNoErrors(['name', 'username', 'email', 'password'])
-                ->assertRedirect(Home::class);
+            $registerTest->assertRedirect(Home::class);
         }
 
         // Check the user was created

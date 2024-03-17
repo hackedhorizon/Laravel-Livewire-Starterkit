@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Modules\EmailVerification\Services\EmailVerificationService;
+use App\Modules\Registration\Services\EmailVerificationService;
 use Illuminate\Support\ServiceProvider;
 
 class EmailVerificationServiceProvider extends ServiceProvider

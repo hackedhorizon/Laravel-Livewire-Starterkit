@@ -79,6 +79,7 @@ return [
     'search' => 'Search',
     'select' => 'Select',
     'select_all' => 'Select All',
+    'select_a_language' => 'Select a language',
     'send' => 'Send',
     'settings' => 'Settings',
     'show' => 'Show',

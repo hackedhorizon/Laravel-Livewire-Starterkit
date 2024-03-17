@@ -79,6 +79,7 @@ return [
     'search' => 'Keresés',
     'select' => 'Válassza ki',
     'select_all' => 'Mindet kiválaszt',
+    'select_a_language' => 'Válasszon nyelvet',
     'send' => 'Küld',
     'settings' => 'Beállítások',
     'show' => 'Előadás',

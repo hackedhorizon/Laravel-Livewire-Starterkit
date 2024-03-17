@@ -2,9 +2,9 @@
 
 namespace App\Livewire\Auth;
 
-use App\Modules\Auth\Services\RecaptchaService;
-use App\Modules\Auth\Services\RegistrationService;
+use App\Modules\Authentication\Services\RecaptchaService;
 use App\Modules\RateLimiter\Services\RateLimiterService;
+use App\Modules\Registration\Services\RegistrationService;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Validate;
 use Livewire\Component;

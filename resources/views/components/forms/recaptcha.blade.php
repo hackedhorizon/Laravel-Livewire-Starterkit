@@ -1,5 +1,19 @@
 <div class="text-xs text-center">
-    <p>This site is protected by ReCaptcha and the Google</p>
-    <b><a href="https://policies.google.com/privacy">Privacy Policy</a></b> and
-    <b><a href="https://policies.google.com/terms">Terms of Service</a></b> apply.
+    <p>{{ __('register.recaptcha_protected') }}</p>
+
+    <b>
+        <a href="https://policies.google.com/privacy">
+            {{ __('register.privacy_policy') }}
+        </a>
+    </b>
+
+    {{ __('register.and') }}
+
+    <b>
+        <a href="https://policies.google.com/terms">
+            {{ __('register.terms_of_service') }}
+        </a>
+    </b>
+
+    {{ __('register.apply') }}.
 </div>

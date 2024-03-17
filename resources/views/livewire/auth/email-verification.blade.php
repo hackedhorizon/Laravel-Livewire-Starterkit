@@ -1,7 +1,9 @@
 <div>
-    <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
-        {{ __('register.thanks_for_registering') }}
+    <div class="">
+        {{ __('register.thanks_for_registering') }} <br>
+        {{ __('Please click the button below to verify your email address.') }}
     </div>
 
-    <x-forms.primary-button click="resendEmailVerification" translation="{{ __('Verify Email Address') }}" />
+    <x-buttons.primary-button click="resendEmailVerification"
+                              translation="{{ __('register.resend_verification_email') }}" />
 </div>

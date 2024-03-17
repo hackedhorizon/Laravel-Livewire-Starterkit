@@ -2,7 +2,7 @@
 
 namespace App\Listeners;
 
-use App\Modules\Auth\Services\WriteFailedLoginAttemptService;
+use App\Modules\Authentication\Services\WriteFailedLoginAttemptService;
 use Illuminate\Auth\Events\Failed;
 use Illuminate\Support\Facades\Log;
 

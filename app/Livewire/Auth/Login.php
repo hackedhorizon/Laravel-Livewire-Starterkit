@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Auth;
 
-use App\Modules\Auth\Services\LoginService;
+use App\Modules\Authentication\Services\LoginService;
 use App\Modules\RateLimiter\Services\RateLimiterService;
 use Livewire\Attributes\Validate;
 use Livewire\Component;

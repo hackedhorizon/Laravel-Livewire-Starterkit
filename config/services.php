@@ -40,4 +40,6 @@ return [
 
     'should_have_recaptcha' => env('GOOGLE_RECAPTCHA'),
 
+    'should_have_localization' => env('LOCALIZATION'),
+
 ];

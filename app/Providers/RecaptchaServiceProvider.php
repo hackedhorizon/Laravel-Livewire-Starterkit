@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Modules\Auth\Services\RecaptchaService;
+use App\Modules\Authentication\Services\RecaptchaService;
 use Illuminate\Support\ServiceProvider;
 
 class RecaptchaServiceProvider extends ServiceProvider
