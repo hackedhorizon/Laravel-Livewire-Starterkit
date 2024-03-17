@@ -34,4 +34,12 @@ interface ReadUserRepositoryInterface
      * @return User|null The user instance if found, otherwise null.
      */
     public function findByUsernameOrEmail(string $identifier): ?User;
+
+    /**
+     * Get the preferred language of a user by providing the user ID.
+     *
+     * @param  int  $userId  The ID of the user.
+     * @return string The preferred language(code) of the user.
+     */
+    public function getUserLanguage(int $userId): string;
 }

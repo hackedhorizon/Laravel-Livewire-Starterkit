@@ -51,4 +51,15 @@ class WriteUserRepository implements WriteUserRepositoryInterface
 
         return false; // User not found, deletion unsuccessful.
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setUserLanguage(int $userId, string $language): bool
+    {
+        $user = User::findOrFail($userId);
+        $user->language = $language;
+
+        return $user->save();
+    }
 }

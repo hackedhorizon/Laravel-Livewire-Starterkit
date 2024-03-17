@@ -33,4 +33,14 @@ class ReadUserRepository implements ReadUserRepositoryInterface
             ->orWhere('email', $identifier)
             ->first();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getUserLanguage(int $userId): string
+    {
+        $user = User::findOrFail($userId);
+
+        return $user->language;
+    }
 }

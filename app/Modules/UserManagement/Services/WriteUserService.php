@@ -4,8 +4,8 @@ namespace App\Modules\UserManagement\Services;
 
 use App\Models\User;
 use App\Modules\UserManagement\DTOs\UserDTO;
-use App\Modules\UserManagement\Repositories\WriteUserRepository;
 use App\Modules\UserManagement\Interfaces\WriteUserServiceInterface;
+use App\Modules\UserManagement\Repositories\WriteUserRepository;
 
 class WriteUserService implements WriteUserServiceInterface
 {

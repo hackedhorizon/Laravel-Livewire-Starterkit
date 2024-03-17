@@ -87,6 +87,22 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Application Locales
+    |--------------------------------------------------------------------------
+    |
+    | These are the supported locales in the application.
+    | If you add more translation files, or remove them,
+    | modify it here as well. Do not forget to enable
+    | localization in the 'config/services.php' file.
+    | If localization is not enabled, the application will
+    | be english automatically.
+    |
+    */
+
+    'locales' => ['en' => 'English', 'hu' => 'Magyar'],
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Fallback Locale
     |--------------------------------------------------------------------------
     |

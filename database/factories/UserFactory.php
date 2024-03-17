@@ -23,12 +23,24 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+
+        $shouldHaveLocalization = config('services.should_have_localization');
+
+        if ($shouldHaveLocalization) {
+            $languageCodes = array_keys(config('app.locales'));    // Fetch language codes from config
+            $languageCode = $languageCodes[array_rand($languageCodes)]; // Choose random language code
+        } else {
+            // Fallback to default language code
+            $languageCode = config('app.fallback_locale');
+        }
+
         return [
             'name' => fake()->name(),
             'username' => fake()->unique()->userName(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
+            'language' => $languageCode,
             'remember_token' => Str::random(10),
         ];
     }

@@ -1,6 +1,6 @@
 <?php
 
-use App\Livewire\Auth\Register;
+use App\Http\Middleware\SetLocale;
 use App\Livewire\Home;
 use Illuminate\Support\Facades\Route;
 
@@ -15,6 +15,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', Home::class)->name('home');
+Route::get('/', Home::class)->name('home')->middleware(SetLocale::class);
 
 require __DIR__.'/auth.php';

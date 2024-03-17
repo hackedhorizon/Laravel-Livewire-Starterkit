@@ -36,4 +36,12 @@ interface WriteUserRepositoryInterface
      * @return bool True if deletion is successful, false otherwise.
      */
     public function deleteUser($id): bool;
+
+    /**
+     * Set a user's preferred language.
+     *
+     * @param  int  $userId  The user id for searching the user
+     * @param  string  $language  The preferred language to set
+     */
+    public function setUserLanguage(int $userId, string $language): bool;
 }
