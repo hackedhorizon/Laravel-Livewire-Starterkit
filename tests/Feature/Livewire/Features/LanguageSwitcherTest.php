@@ -1,9 +1,17 @@
 <?php
 
+namespace Tests\Feature\Livewire\Features;
+
+use App\Http\Middleware\SetLocale;
 use App\Livewire\Features\LanguageSwitcher;
 use App\Models\User;
+use Database\Factories\UserFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Session;
 use Livewire\Livewire;
 use Tests\TestCase;
 
@@ -18,6 +26,8 @@ class LanguageSwitcherTest extends TestCase
      *  1. Render the LanguageSwitcher component.
      *  2. Assert that the component contains the text for selecting a language.
      */
+
+    /** @test */
     public function component_renders_correctly()
     {
         Livewire::test(LanguageSwitcher::class)
@@ -34,6 +44,7 @@ class LanguageSwitcherTest extends TestCase
      *  4. Assert that the user is redirected to the home page.
      *  5. Assert that the user is not authenticated.
      */
+    /** @test */
     public function user_can_select_language()
     {
         $randomLocale = $this->getRandomLocale();
@@ -56,6 +67,7 @@ class LanguageSwitcherTest extends TestCase
      *  4. Assert that the selected language is stored in the session.
      *  5. Assert that the user's language attribute in the database is updated.
      */
+    /** @test */
     public function authenticated_user_can_select_language_and_update_user_language_in_database()
     {
         $randomLocale = $this->getRandomLocale();
@@ -79,6 +91,7 @@ class LanguageSwitcherTest extends TestCase
      *  4. Set the selected language in the component to the user's language.
      *  5. Assert that the application locale matches the user's language attribute.
      */
+    /** @test */
     public function it_sets_locale_from_authenticated_user()
     {
         $user = User::factory()->create(['language' => 'hu']);
