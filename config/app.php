@@ -181,11 +181,11 @@ return [
          */
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
-        // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\RecaptchaServiceProvider::class,
         App\Providers\EmailVerificationServiceProvider::class,
+        App\Providers\LocalizationServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
     ])->toArray(),
 
@@ -201,7 +201,5 @@ return [
     */
 
     'aliases' => Facade::defaultAliases()->merge([
-        // 'Example' => App\Facades\Example::class,
     ])->toArray(),
-
 ];

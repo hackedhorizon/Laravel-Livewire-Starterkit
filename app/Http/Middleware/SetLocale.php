@@ -2,30 +2,23 @@
 
 namespace App\Http\Middleware;
 
+use App\Modules\Localization\Services\LocalizationService;
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
 
 class SetLocale
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-     */
+    protected LocalizationService $localizationService;
+
+    public function __construct(LocalizationService $localizationService)
+    {
+        $this->localizationService = $localizationService;
+    }
+
     public function handle(Request $request, Closure $next)
     {
-        if (config('services.should_have_localization')) {
-            if (Auth::check()) {
-                $locale = Auth::user()->language;
-            } else {
-                $locale = session('locale', config('app.locale'));
-            }
-
-            app()->setLocale($locale);
-            Session::put('locale', $locale);
-        }
+        $locale = $this->localizationService->getAppLocale();
+        $this->localizationService->setAppLocale($locale);
 
         return $next($request);
     }

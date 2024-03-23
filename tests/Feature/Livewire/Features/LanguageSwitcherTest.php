@@ -1,17 +1,9 @@
 <?php
 
-namespace Tests\Feature\Livewire\Features;
-
-use App\Http\Middleware\SetLocale;
 use App\Livewire\Features\LanguageSwitcher;
 use App\Models\User;
-use Database\Factories\UserFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Session;
 use Livewire\Livewire;
 use Tests\TestCase;
 
@@ -19,48 +11,92 @@ class LanguageSwitcherTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
-    public function it_sets_locale_based_on_user_language_when_authenticated()
+    /**
+     * Test: Component renders correctly.
+     *
+     * Steps:
+     *  1. Render the LanguageSwitcher component.
+     *  2. Assert that the component contains the text for selecting a language.
+     */
+    public function component_renders_correctly()
     {
-        $user = User::factory()->create(['language' => 'en']);
-
-        Auth::login($user);
-
-        $middleware = new SetLocale();
-
-        $request = Request::create('/');
-        $middleware->handle($request, function ($req) {
-            // Assert that locale is set to user language
-            $this->assertEquals('en', app()->getLocale());
-        });
+        Livewire::test(LanguageSwitcher::class)
+            ->assertSee(__('actions.select_a_language'));
     }
 
-    /** @test */
-    public function it_sets_locale_based_on_session_locale_when_not_authenticated()
+    /**
+     * Test: User can select a language.
+     *
+     * Steps:
+     *  1. Generate a random locale.
+     *  2. Set the selected language in the LanguageSwitcher component.
+     *  3. Assert that the selected language is stored in the session.
+     *  4. Assert that the user is redirected to the home page.
+     *  5. Assert that the user is not authenticated.
+     */
+    public function user_can_select_language()
     {
-        Config::set('app.locale', 'en'); // Set fallback locale to 'en'
-        Session::put('locale', 'es'); // Set session locale to 'es'
+        $randomLocale = $this->getRandomLocale();
 
-        $middleware = new SetLocale();
+        Livewire::test(LanguageSwitcher::class)
+            ->set('selectedLanguage', $randomLocale)
+            ->assertSessionHas('locale', $randomLocale)
+            ->assertRedirect('/');
 
-        $request = Request::create('/');
-        $middleware->handle($request, function ($req) {
-            // Assert that locale is set to session locale
-            $this->assertEquals('es', app()->getLocale());
-        });
+        $this->assertGuest();
     }
 
-    /** @test */
-    public function it_sets_locale_to_fallback_when_no_user_or_session_locale()
+    /**
+     * Test: Authenticated user can select a language and update user language in the database.
+     *
+     * Steps:
+     *  1. Generate a random locale.
+     *  2. Create a user with an empty language attribute.
+     *  3. Act as the user and set the selected language in the LanguageSwitcher component.
+     *  4. Assert that the selected language is stored in the session.
+     *  5. Assert that the user's language attribute in the database is updated.
+     */
+    public function authenticated_user_can_select_language_and_update_user_language_in_database()
     {
-        Config::set('app.locale', 'en'); // Set fallback locale to 'en'
+        $randomLocale = $this->getRandomLocale();
+        $user = User::factory()->create(['language' => '']);
 
-        $middleware = new SetLocale();
+        Livewire::actingAs($user)
+            ->test(LanguageSwitcher::class)
+            ->set('selectedLanguage', $randomLocale)
+            ->assertSessionHas('locale', $randomLocale);
 
-        $request = Request::create('/');
-        $middleware->handle($request, function ($req) {
-            // Assert that locale is set to fallback locale
-            $this->assertEquals('en', app()->getLocale());
-        });
+        $this->assertEquals($randomLocale, $user->refresh()->language);
+    }
+
+    /**
+     * Test: Set locale from authenticated user's language preference.
+     *
+     * Steps:
+     *  1. Create a user with the 'hu' language attribute.
+     *  2. Authenticate as the user.
+     *  3. Render the LanguageSwitcher component.
+     *  4. Set the selected language in the component to the user's language.
+     *  5. Assert that the application locale matches the user's language attribute.
+     */
+    public function it_sets_locale_from_authenticated_user()
+    {
+        $user = User::factory()->create(['language' => 'hu']);
+        $this->actingAs($user);
+        $component = Livewire::test(LanguageSwitcher::class);
+        $component->set('selectedLanguage', $user->language);
+        $this->assertEquals(app()->getLocale(), $user->language);
+    }
+
+    /**
+     * Helper method to get a random locale from available locales.
+     *
+     * @return string The randomly selected locale.
+     */
+    private function getRandomLocale()
+    {
+        $availableLocales = array_keys(Config::get('app.locales'));
+
+        return $availableLocales[array_rand($availableLocales)];
     }
 }

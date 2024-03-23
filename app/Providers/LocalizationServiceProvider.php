@@ -16,10 +16,10 @@ class LocalizationServiceProvider extends ServiceProvider
     {
         // Only bind localization service to the service container if it's enabled in the configuration file.
         if (config('services.should_have_localization')) {
-            $this->app->bind(LocalizationService::class, function ($app) {
+            $this->app->singleton(LocalizationService::class, function ($app) {
                 return new LocalizationService(
-                    $app->make(ReadUserRepository::class),
-                    $app->make(WriteUserRepository::class)
+                    $app->make(WriteUserRepository::class),
+                    $app->make(ReadUserRepository::class)
                 );
             });
         }

@@ -20,22 +20,15 @@ class LanguageSwitcher extends Component
 
     public function updatedSelectedLanguage(LocalizationService $localizationService)
     {
-        session()->put('locale', $this->selectedLanguage);
-
-        if (Auth::check()) {
-            $userId = Auth::user()->id;
-
-            $localizationService->setUserLanguage($userId, $this->selectedLanguage);
-        }
-
-        $localizationService->setCurrentLanguage($this->selectedLanguage);
+        $localizationService->updateCurrentlySelectedLanguage(Auth::id(), $this->selectedLanguage);
+        $localizationService->setAppLocale($this->selectedLanguage);
 
         return $this->redirect('/', navigate: true);
     }
 
-    public function mount()
+    public function mount(LocalizationService $localizationService)
     {
-        $this->selectedLanguage = session()->get('locale', Config::get('app.fallback_locale'));
+        $this->selectedLanguage = $localizationService->getAppLocale();
         $this->languages = collect(Config::get('app.locales'));
     }
 }
