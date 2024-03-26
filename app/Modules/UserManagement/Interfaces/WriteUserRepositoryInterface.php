@@ -25,9 +25,9 @@ interface WriteUserRepositoryInterface
      *
      * @param  int  $id  User ID to update.
      * @param  array  $data  Updated user data.
-     * @return \App\Models\User|null Updated user instance or null if update fails.
+     * @return bool True if update was successful, false otherwise.
      */
-    public function updateUser($id, $data): ?User;
+    public function updateUser($id, $data): bool;
 
     /**
      * Delete a user.
@@ -36,12 +36,4 @@ interface WriteUserRepositoryInterface
      * @return bool True if deletion is successful, false otherwise.
      */
     public function deleteUser($id): bool;
-
-    /**
-     * Set a user's preferred language.
-     *
-     * @param  int  $userId  The user id for searching the user
-     * @param  string  $language  The preferred language to set
-     */
-    public function setUserLanguage(int $userId, string $language): bool;
 }

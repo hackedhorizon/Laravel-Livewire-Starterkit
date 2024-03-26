@@ -14,9 +14,7 @@ class EmailVerificationService implements EmailVerificationInterface
      */
     public function sendVerificationEmail(): void
     {
-        if (! $this->user->hasVerifiedEmail()) {
-            $this->user->sendEmailVerificationNotification();
-        }
+        $this->user->sendEmailVerificationNotification();
     }
 
     /**
@@ -27,6 +25,12 @@ class EmailVerificationService implements EmailVerificationInterface
         // Check if the hash provided in the URL matches the hashed version of the user's email
         if (! hash_equals((string) $hash, sha1($this->user->getEmailForVerification()))) {
             return false; // If the hashes don't match, the email verification failed
+        }
+
+        // If the user updated his email, we are going to replace the old with the new one.
+        if ($this->user->temporary_email !== null) {
+            $this->user->email = $this->user->temporary_email;
+            $this->user->temporary_email = null;
         }
 
         // Mark the user's email as verified

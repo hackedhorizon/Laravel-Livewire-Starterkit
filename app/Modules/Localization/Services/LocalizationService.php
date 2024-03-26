@@ -3,30 +3,32 @@
 namespace App\Modules\Localization\Services;
 
 use App\Modules\Localization\Interfaces\LocalizationServiceInterface;
-use App\Modules\UserManagement\Repositories\ReadUserRepository;
-use App\Modules\UserManagement\Repositories\WriteUserRepository;
+use App\Modules\UserManagement\Services\ReadUserService;
+use App\Modules\UserManagement\Services\WriteUserService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 
 class LocalizationService implements LocalizationServiceInterface
 {
-    private WriteUserRepository $writeUserRepository;
+    private WriteUserService $writeUserService;
 
-    private ReadUserRepository $readUserRepository;
+    private ReadUserService $readUserService;
 
     public function __construct(
-        WriteUserRepository $writeUserRepository,
-        ReadUserRepository $readUserRepository
+        WriteUserService $writeUserService,
+        ReadUserService $readUserService
     ) {
-        $this->writeUserRepository = $writeUserRepository;
-        $this->readUserRepository = $readUserRepository;
+        $this->writeUserService = $writeUserService;
+        $this->readUserService = $readUserService;
     }
 
     public function updateCurrentlySelectedLanguage(?int $userId, string $language): bool
     {
         // If the user logged in, update the user's language in the database
         if ($userId !== null) {
-            return $this->writeUserRepository->setUserLanguage($userId, $language);
+            return $this->writeUserService->updateUser($userId, [
+                'language' => $language,
+            ]);
         }
 
         // Handle scenario where user is not logged in, store the language preference in session
@@ -44,7 +46,7 @@ class LocalizationService implements LocalizationServiceInterface
 
     private function getUserLocale($userId): string
     {
-        $userLanguage = $this->readUserRepository->getUserLanguage($userId);
+        $userLanguage = $this->readUserService->getUserProperty('language', $userId);
 
         return $userLanguage ?? Config::get('app.locale');
     }

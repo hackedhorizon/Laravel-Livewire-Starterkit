@@ -42,4 +42,28 @@ interface ReadUserRepositoryInterface
      * @return string The preferred language(code) of the user.
      */
     public function getUserLanguage(int $userId): string;
+
+    /**
+     * Get the full name of a user by providing the user ID.
+     *
+     * @param  int  $userId  The ID of the user.
+     * @return string The full name of the user.
+     */
+    public function getUserFullName(int $userId): string;
+
+    /**
+     * Get the nickname (username) of a user by providing the user ID.
+     *
+     * @param  int  $userId  The ID of the user.
+     * @return string The nickname (username) of the user.
+     */
+    public function getUserNickName(int $userId): string;
+
+    /**
+     * Get the email address of a user by providing the user ID.
+     *
+     * @param  int  $userId  The ID of the user.
+     * @return string The email address of the user.
+     */
+    public function getUserEmailAddress(int $userId): string;
 }
