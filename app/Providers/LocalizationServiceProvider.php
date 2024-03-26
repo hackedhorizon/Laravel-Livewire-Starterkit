@@ -14,15 +14,12 @@ class LocalizationServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        // Only bind localization service to the service container if it's enabled in the configuration file.
-        if (config('services.should_have_localization')) {
-            $this->app->singleton(LocalizationService::class, function ($app) {
-                return new LocalizationService(
-                    $app->make(WriteUserService::class),
-                    $app->make(ReadUserService::class)
-                );
-            });
-        }
+        $this->app->singleton(LocalizationService::class, function ($app) {
+            return new LocalizationService(
+                $app->make(WriteUserService::class),
+                $app->make(ReadUserService::class)
+            );
+        });
     }
 
     /**

@@ -7,6 +7,7 @@ use App\Livewire\Auth\Register;
 use App\Livewire\Home;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
 use Tests\TestCase;
 
@@ -23,6 +24,16 @@ class RegistrationTest extends TestCase
     const TEST_PASSWORD = 'password';
 
     const TEST_RECAPTCHA_TOKEN = 'valid_recaptcha_token';
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // Define the routes necessary for testing (in a case this functionality is disabled)
+        Route::get('/verify-email', [\App\Livewire\Auth\EmailVerification::class, '__invoke'])->name('verification.notice');
+        Route::get('/verify-email/{id}/{hash}', [\App\Livewire\Auth\EmailVerification::class, 'verifyEmail'])->name('verification.verify');
+        Route::post('/verify-email/send-notification', [\App\Livewire\Auth\EmailVerification::class, 'sendVerificationEmail'])->name('verification.send');
+    }
 
     /**
      * Test: Render the registration component successfully.
@@ -142,51 +153,42 @@ class RegistrationTest extends TestCase
      * Test: User can register.
      *
      * Steps:
-     *  1. Check if recaptcha is enabled in the config file. If yes, we skip this test.
-     *  2. Initialize Livewire test for the Register component with valid user data.
-     *  3. Call the 'register' method.
-     *  4. Assert that there are no validation errors for name, username, email, and password.
-     *  5. Assert the redirection based on the email verification configuration.
-     *  6. Additional assertions can be added, such as checking that the user was created in the database.
+     *  1. Initialize Livewire test for the Register component with valid user data.
+     *  2. Call the 'register' method.
+     *  3. Assert that there are no validation errors for name, username, email, and password.
+     *  4. Assert the redirection based on the email verification configuration.
+     *  5. Additional assertions can be added, such as checking that the user was created in the database.
      */
     public function test_user_can_register()
     {
-        if (config('services.should_have_recaptcha')) {
-            $this->markTestSkipped('Recaptcha is enabled in the configuration.');
-        }
+        config(['services.should_verify_email' => true]);
+        config(['services.should_have_recaptcha' => false]);
 
-        $registerTest = Livewire::test(Register::class)
+        Livewire::test(Register::class)
             ->set('name', self::TEST_NAME)
             ->set('username', self::TEST_USERNAME)
             ->set('email', self::TEST_EMAIL)
             ->set('password', self::TEST_PASSWORD)
             ->call('register')
-            ->assertHasNoErrors(['name', 'username', 'email', 'password']);
-
-        if (config('services.should_verify_email')) {
-            $registerTest->assertRedirect(EmailVerification::class);
-        } else {
-            $registerTest->assertRedirect(Home::class);
-        }
+            ->assertHasNoErrors(['name', 'username', 'email', 'password'])
+            ->assertRedirect(route('verification.notice'));
     }
 
     /**
      * Test: User can register with a valid Recaptcha token.
      *
      * Steps:
-     *  1. Check if recaptcha is enabled in the config file. If it is not enabled, we skip this test.
-     *  2. Mock the RecaptchaService response to always return success for testing purposes.
-     *  3. Initialize Livewire test for the Register component with valid user data and Recaptcha token.
-     *  4. Call the 'register' method.
-     *  5. Assert that there are no validation errors for name, username, email, and password.
-     *  6. Assert the redirection based on the email verification configuration.
-     *  7. Additional assertions can be added, such as checking that the user was created in the database.
+     *  1. Mock the RecaptchaService response to always return success for testing purposes.
+     *  2. Initialize Livewire test for the Register component with valid user data and Recaptcha token.
+     *  3. Call the 'register' method.
+     *  4. Assert that there are no validation errors for name, username, email, and password.
+     *  5. Assert the redirection based on the email verification configuration.
+     *  6. Additional assertions can be added, such as checking that the user was created in the database.
      */
     public function test_user_can_register_with_valid_recaptcha()
     {
-        if (! config('services.should_have_recaptcha')) {
-            $this->markTestSkipped('Recaptcha is not enabled in the configuration.');
-        }
+        config(['services.should_verify_email' => true]);
+        config(['services.should_have_recaptcha' => true]);
 
         // Mock the RecaptchaService response to always return success for testing purposes
         Http::fake([
@@ -200,15 +202,10 @@ class RegistrationTest extends TestCase
             ->set('password', self::TEST_PASSWORD)
             ->set('recaptchaToken', self::TEST_RECAPTCHA_TOKEN)
             ->call('register')
-            ->assertHasNoErrors(['name', 'username', 'email', 'password']);
+            ->assertHasNoErrors(['name', 'username', 'email', 'password'])
+            ->assertRedirect(route('verification.notice'));
 
-        if (config('services.should_verify_email')) {
-            $registerTest->assertRedirect(EmailVerification::class);
-        } else {
-            $registerTest->assertRedirect(Home::class);
-        }
-
-        // Check the user was created
+        // Check if the user was created
         $this->assertDatabaseHas('users', [
             'name' => self::TEST_NAME,
             'username' => self::TEST_USERNAME,
@@ -225,20 +222,17 @@ class RegistrationTest extends TestCase
      * Test: User registration fails with an invalid Recaptcha token.
      *
      * Steps:
-     *  1. Check if recaptcha is enabled in the config file. If it is not enabled, we skip this test.
-     *  2. Mock the RecaptchaService response to always return failure for testing purposes.
-     *  3. Initialize Livewire test for the Register component with valid user data and an invalid Recaptcha token.
-     *  4. Call the 'register' method.
-     *  5. Assert that there are no validation errors for name, username, email, and password.
-     *  6. Assert that there is a validation error for the Recaptcha field.
-     *  7. Assert that the user is not redirected.
-     *  8. Check that the user was not created in the database.
+     *  1. Mock the RecaptchaService response to always return failure for testing purposes.
+     *  2. Initialize Livewire test for the Register component with valid user data and an invalid Recaptcha token.
+     *  3. Call the 'register' method.
+     *  4. Assert that there are no validation errors for name, username, email, and password.
+     *  5. Assert that there is a validation error for the Recaptcha field.
+     *  6. Assert that the user is not redirected.
+     *  7. Check that the user was not created in the database.
      */
     public function test_user_can_not_register_with_invalid_recaptcha()
     {
-        if (! config('services.should_have_recaptcha')) {
-            $this->markTestSkipped('Recaptcha is not enabled in the configuration.');
-        }
+        config(['services.should_have_recaptcha' => true]);
 
         // Mock the RecaptchaService response to always return failure for testing purposes
         Http::fake([

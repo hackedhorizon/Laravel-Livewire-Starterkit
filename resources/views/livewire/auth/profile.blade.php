@@ -18,7 +18,9 @@
                 $translationKey = 'validation.attributes.' . $field;
                 $type = $field === 'password' ? 'password' : 'text';
             @endphp
+
             <label for="{{ $field }}">{{ ucfirst(__($translationKey)) }}</label>
+
             <x-forms.input :id="$field"
                            :type="$type"
                            :maxlength="$maxlength"

@@ -12,12 +12,9 @@ class RecaptchaServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        // Only bind Google's recaptcha service to the service container if it's enabled in the configuration file.
-        if (config('services.should_have_recaptcha')) {
-            $this->app->bind(RecaptchaService::class, function ($app) {
-                return new RecaptchaService();
-            });
-        }
+        $this->app->bind(RecaptchaService::class, function ($app) {
+            return new RecaptchaService();
+        });
     }
 
     /**

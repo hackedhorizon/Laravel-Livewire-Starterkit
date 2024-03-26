@@ -51,8 +51,6 @@ class ReadUserService implements ReadUserServiceInterface
                 return $this->repository->getUserEmailAddress($userId);
             case 'language':
                 return $this->repository->getUserLanguage($userId);
-            default:
-                return '';
         }
     }
 }
