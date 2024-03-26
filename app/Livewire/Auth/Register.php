@@ -14,7 +14,7 @@ class Register extends Component
     #[Validate('required|string|max:50')]
     public string $name = '';
 
-    #[Validate('required|string|max:30|unique:users,username')]
+    #[Validate('required|alpha_dash|string|max:30|unique:users,username')]
     public string $username = '';
 
     #[Validate('required|email|max:50|unique:users,email')]

@@ -2,14 +2,9 @@
 
 namespace Tests\Feature\Livewire\Features;
 
-use App\Http\Middleware\SetLocale;
 use App\Livewire\Features\LanguageSwitcher;
 use App\Models\User;
-use Database\Factories\UserFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
 use Livewire\Livewire;

@@ -29,7 +29,7 @@ class WriteUserService implements WriteUserServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function updateUser($id, $data): ?User
+    public function updateUser($id, $data): bool
     {
         return $this->repository->updateUser($id, $data);
     }

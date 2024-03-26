@@ -3,8 +3,8 @@
 namespace App\Providers;
 
 use App\Modules\Localization\Services\LocalizationService;
-use App\Modules\UserManagement\Repositories\ReadUserRepository;
-use App\Modules\UserManagement\Repositories\WriteUserRepository;
+use App\Modules\UserManagement\Services\ReadUserService;
+use App\Modules\UserManagement\Services\WriteUserService;
 use Illuminate\Support\ServiceProvider;
 
 class LocalizationServiceProvider extends ServiceProvider
@@ -18,8 +18,8 @@ class LocalizationServiceProvider extends ServiceProvider
         if (config('services.should_have_localization')) {
             $this->app->singleton(LocalizationService::class, function ($app) {
                 return new LocalizationService(
-                    $app->make(WriteUserRepository::class),
-                    $app->make(ReadUserRepository::class)
+                    $app->make(WriteUserService::class),
+                    $app->make(ReadUserService::class)
                 );
             });
         }

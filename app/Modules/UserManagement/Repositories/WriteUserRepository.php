@@ -25,7 +25,7 @@ class WriteUserRepository implements WriteUserRepositoryInterface
      * {@inheritdoc}
      */
     // Todo: change this to use UserDTO
-    public function updateUser($id, $data): ?User
+    public function updateUser($id, $data): bool
     {
         $user = User::find($id);
 
@@ -33,7 +33,7 @@ class WriteUserRepository implements WriteUserRepositoryInterface
             $user->update($data);
         }
 
-        return $user;
+        return $user->save();
     }
 
     /**
@@ -52,14 +52,14 @@ class WriteUserRepository implements WriteUserRepositoryInterface
         return false; // User not found, deletion unsuccessful.
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setUserLanguage(int $userId, string $language): bool
-    {
-        $user = User::findOrFail($userId);
-        $user->language = $language;
+    // /**
+    //  * {@inheritdoc}
+    //  */
+    // public function setUserLanguage(int $userId, string $language): bool
+    // {
+    //     $user = User::findOrFail($userId);
+    //     $user->language = $language;
 
-        return $user->save();
-    }
+    //     return $user->save();
+    // }
 }

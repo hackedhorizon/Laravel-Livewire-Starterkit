@@ -27,16 +27,32 @@ class ReadUserService implements ReadUserServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function findUserById($id): ?User
+    public function findUserById($userId): ?User
     {
-        return $this->repository->findUserByID($id);
+        return $this->repository->findUserByID($userId);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function findUserByUsernameOrEmail($identifier): ?User
+    public function findUserByUsernameOrEmail($userId): ?User
     {
-        return $this->repository->findByUsernameOrEmail($identifier);
+        return $this->repository->findByUsernameOrEmail($userId);
+    }
+
+    public function getUserProperty($propertyName, $userId): string
+    {
+        switch ($propertyName) {
+            case 'name':
+                return $this->repository->getUserFullName($userId);
+            case 'username':
+                return $this->repository->getUserNickName($userId);
+            case 'email':
+                return $this->repository->getUserEmailAddress($userId);
+            case 'language':
+                return $this->repository->getUserLanguage($userId);
+            default:
+                return '';
+        }
     }
 }

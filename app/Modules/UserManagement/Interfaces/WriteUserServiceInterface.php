@@ -27,9 +27,9 @@ interface WriteUserServiceInterface
      *
      * @param  int  $id  User ID to update.
      * @param  array  $data  Updated user data.
-     * @return array|null Updated user data or null if update fails.
+     * @return bool True if update was successful, false otherwise.
      */
-    public function updateUser($id, $data): ?User;
+    public function updateUser($id, $data): bool;
 
     /**
      * Delete a user.
