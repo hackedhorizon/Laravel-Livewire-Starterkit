@@ -15,8 +15,11 @@ class ProfileTest extends TestCase
     use RefreshDatabase;
 
     const TEST_NAME = 'John Doe';
+
     const TEST_USERNAME = 'johndoe';
+
     const TEST_EMAIL = 'test@example.com';
+
     const TEST_PASSWORD = 'password';
 
     protected function setUp(): void
@@ -62,15 +65,15 @@ class ProfileTest extends TestCase
 
         Livewire::actingAs($user)
             ->test(Profile::class)
-            ->set('name',     self::TEST_NAME)
+            ->set('name', self::TEST_NAME)
             ->set('username', self::TEST_USERNAME)
-            ->set('email',    self::TEST_EMAIL)
+            ->set('email', self::TEST_EMAIL)
             ->set('password', self::TEST_PASSWORD)
             ->call('updateProfileInformation');
 
         $this->assertDatabaseHas('users', [
-            'name' =>            self::TEST_NAME,
-            'username' =>        self::TEST_USERNAME,
+            'name' => self::TEST_NAME,
+            'username' => self::TEST_USERNAME,
             'temporary_email' => self::TEST_EMAIL,
         ]);
 
@@ -94,16 +97,16 @@ class ProfileTest extends TestCase
 
         Livewire::actingAs($user)
             ->test(Profile::class)
-            ->set('name',     self::TEST_NAME)
+            ->set('name', self::TEST_NAME)
             ->set('username', self::TEST_USERNAME)
-            ->set('email',    self::TEST_EMAIL)
+            ->set('email', self::TEST_EMAIL)
             ->set('password', self::TEST_PASSWORD)
             ->call('updateProfileInformation');
 
         $this->assertDatabaseHas('users', [
-            'name' =>      self::TEST_NAME,
-            'username' =>  self::TEST_USERNAME,
-            'email' =>     self::TEST_EMAIL,
+            'name' => self::TEST_NAME,
+            'username' => self::TEST_USERNAME,
+            'email' => self::TEST_EMAIL,
         ]);
 
         $this->assertTrue(session()->has('message_success')); // Check if success flash message is set
@@ -145,8 +148,6 @@ class ProfileTest extends TestCase
     /**
      * Simulate email verification and update email.
      *
-     * @param \App\Models\User $user
-     * @param \App\Modules\Registration\Services\EmailVerificationService $emailVerificationService
      * @return void
      */
     private function verifyEmailAndUpdate(User $user, EmailVerificationService $emailVerificationService)

@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Auth;
 
 class LoginService implements LoginServiceInterface
 {
-
     private ReadUserService $readUserService;
 
     public function __construct(ReadUserService $readUserService)
@@ -19,9 +18,9 @@ class LoginService implements LoginServiceInterface
     /**
      * Attempt to authenticate a user.
      *
-     * @param string $identifier The username or email of the user.
-     * @param string $password The password provided by the user.
-     * @param bool $remember Whether to "remember" the user's authentication.
+     * @param  string  $identifier  The username or email of the user.
+     * @param  string  $password  The password provided by the user.
+     * @param  bool  $remember  Whether to "remember" the user's authentication.
      * @return bool True if authentication was successful, false otherwise.
      */
     public function attemptLogin(string $identifier, string $password, bool $remember): bool
@@ -33,16 +32,18 @@ class LoginService implements LoginServiceInterface
         if ($user) {
             $credentials = [
                 'email' => $user->email,
-                'password' => $password
+                'password' => $password,
             ];
 
             if (Auth::attempt($credentials, $remember)) {
                 $this->onSuccessfulLogin();
+
                 return true;
             }
         }
 
         $this->onFailedLogin();
+
         return false;
     }
 
@@ -50,8 +51,6 @@ class LoginService implements LoginServiceInterface
      * Handle actions after successful user login.
      *
      * This method regenerates the session and flashes a success message.
-     *
-     * @return void
      */
     public function onSuccessfulLogin(): void
     {
@@ -63,8 +62,6 @@ class LoginService implements LoginServiceInterface
      * Handle actions after failed user login.
      *
      * This method can be used for additional handling after a failed login attempt.
-     *
-     * @return void
      */
     public function onFailedLogin(): void
     {
