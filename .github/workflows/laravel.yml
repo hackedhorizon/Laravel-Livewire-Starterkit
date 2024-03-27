@@ -28,13 +28,11 @@ jobs:
         run: |
           mkdir -p database
           touch database/database.sqlite
-      - name: Set Xdebug coverage mode
-        run: echo "export XDEBUG_MODE=coverage" >> $GITHUB_ENV
       - name: Execute tests (Unit and Feature tests) via PHPUnit
         env:
           DB_CONNECTION: sqlite
           DB_DATABASE: database/database.sqlite
-        run: vendor/bin/phpunit --testdox --coverage-clover=coverage.xml
+        run: XDEBUG_MODE=coverage vendor/bin/phpunit --coverage-clover coverage.xml
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v4.0.1
         with:
