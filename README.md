@@ -1,3 +1,5 @@
+[![codecov](https://codecov.io/github/hackedhorizon/Laravel-Livewire-Starterkit/graph/badge.svg?token=F1JJKTA809)](https://codecov.io/github/hackedhorizon/Laravel-Livewire-Starterkit)
+
 # Simple Authentication Scaffolding with Laravel Livewire
 
 This repository contains a Laravel Livewire application featuring registration and authentication functionality. It's akin to Breeze + Livewire but without the Volt syntax.
@@ -70,15 +72,14 @@ This repository contains a Laravel Livewire application featuring registration a
     ```
 
     This will create a default user with the following credentials:
-    **- username:** test
-    **- password:** password
 
-## Testing
+    - username: test
+    - password: password
 
-The application is currently 83% tested. To run PHPUnit tests:
+## Run tests
 
 ```
-sail test
+sail artisan test
 ```
 
 ## Contributing
