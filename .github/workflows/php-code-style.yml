@@ -5,8 +5,14 @@ on:
 jobs:
   php-code-styling:
     runs-on: ubuntu-latest
+
+    permissions:
+      # Give the default GITHUB_TOKEN write permission to commit and push the
+      # added or changed files to the repository.
+      contents: write
+
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 2
       - name: "laravel-pint"
@@ -15,9 +21,10 @@ jobs:
           preset: laravel
 
       - name: Commit changes
-        env:
-          GITHUB_TOKEN: ${{ secrets.PINT_TOKEN }}
-        uses: stefanzweifel/git-auto-commit-action@v4
+
+        uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: PHP Linting (Pint)
           skip_fetch: true
+          env:
+            GITHUB_TOKEN: ${{ secrets.PINT_TOKEN }}
