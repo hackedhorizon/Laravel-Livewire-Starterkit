@@ -1,30 +1,23 @@
-name: PHP Linting (Pint)
+name: PHP Code styling with Pint
 on:
   workflow_dispatch:
   push:
-    branches-ignore:
-      - "dependabot/npm_and_yarn/*"
 jobs:
-  Pint:
+  php-code-styling:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
-      - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
-        with:
-          php-version: "8.1"
       - uses: actions/checkout@v3
-      - name: Copy .env
-        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
-      - name: Install Dependencies
-        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-      - name: Launch Pint inspection
-        run: vendor/bin/pint
+        with:
+          fetch-depth: 2
+      - name: "laravel-pint"
+        uses: aglipanci/laravel-pint-action@0.1.0
+        with:
+          preset: laravel
 
       - name: Commit changes
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: Fix code-style (Pint).
-          skip_fetch: true
         env:
           GITHUB_TOKEN: ${{ secrets.PINT_TOKEN }}
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: PHP Linting (Pint)
+          skip_fetch: true
