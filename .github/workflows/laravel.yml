@@ -32,9 +32,10 @@ jobs:
         env:
           DB_CONNECTION: sqlite
           DB_DATABASE: database/database.sqlite
-        run: vendor/bin/phpunit --testdox
+        run: vendor/bin/phpunit --coverage-html=coverage-report
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v4.0.1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           slug: hackedhorizon/Laravel-Livewire-Starterkit
+          file: coverage-report/index.html
