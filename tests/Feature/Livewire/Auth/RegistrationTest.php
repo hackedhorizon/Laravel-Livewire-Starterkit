@@ -2,9 +2,7 @@
 
 namespace Tests\Feature\Livewire\Auth;
 
-use App\Livewire\Auth\EmailVerification;
 use App\Livewire\Auth\Register;
-use App\Livewire\Home;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
