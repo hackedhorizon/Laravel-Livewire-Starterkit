@@ -1,6 +1,4 @@
-[![codecov](https://codecov.io/github/hackedhorizon/Laravel-Livewire-Starterkit/graph/badge.svg?token=F1JJKTA809)](https://codecov.io/github/hackedhorizon/Laravel-Livewire-Starterkit)
-
-[![Build](https://github.com/hackedhorizon/Laravel-Livewire-Starterkit/actions/workflows/build.yml/badge.svg)](https://github.com/hackedhorizon/Laravel-Livewire-Starterkit/actions/workflows/build.yml)
+[![codecov](https://codecov.io/github/hackedhorizon/Laravel-Livewire-Starterkit/graph/badge.svg?token=F1JJKTA809)](https://codecov.io/github/hackedhorizon/Laravel-Livewire-Starterkit) [![Build](https://github.com/hackedhorizon/Laravel-Livewire-Starterkit/actions/workflows/build.yml/badge.svg)](https://github.com/hackedhorizon/Laravel-Livewire-Starterkit/actions/workflows/build.yml)
 
 # Simple Authentication Scaffolding with Laravel Livewire
 
