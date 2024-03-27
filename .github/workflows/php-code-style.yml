@@ -26,5 +26,5 @@ jobs:
         with:
           commit_message: PHP Linting (Pint)
           skip_fetch: true
-          env:
-            GITHUB_TOKEN: ${{ secrets.PINT_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.PINT_TOKEN }}
