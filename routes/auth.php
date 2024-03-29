@@ -3,7 +3,7 @@
 use App\Http\Middleware\SetLocale;
 use App\Livewire\Auth\EmailVerification;
 use App\Livewire\Auth\Login;
-use App\Livewire\Auth\Profile;
+use App\Livewire\User\Profile;
 use App\Livewire\Auth\Register;
 use Illuminate\Support\Facades\Route;
 

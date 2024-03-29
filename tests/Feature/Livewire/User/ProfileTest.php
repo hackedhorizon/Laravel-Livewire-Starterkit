@@ -1,8 +1,8 @@
 <?php
 
-namespace Tests\Feature\Livewire\Auth;
+namespace Tests\Feature\Livewire\User;
 
-use App\Livewire\Auth\Profile;
+use App\Livewire\User\Profile;
 use App\Models\User;
 use App\Modules\Registration\Services\EmailVerificationService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
