@@ -3,8 +3,8 @@
 use App\Http\Middleware\SetLocale;
 use App\Livewire\Auth\EmailVerification;
 use App\Livewire\Auth\Login;
-use App\Livewire\User\Profile;
 use App\Livewire\Auth\Register;
+use App\Livewire\User\Profile;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['throttle:web', SetLocale::class])->group(function () {
