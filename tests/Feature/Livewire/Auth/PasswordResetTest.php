@@ -3,7 +3,6 @@
 namespace Tests\Feature\Livewire\Auth;
 
 use App\Models\User;
-use App\Modules\Session\Services\MessageService;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Notification;
