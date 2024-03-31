@@ -19,22 +19,6 @@ class ReadUserService implements ReadUserServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getUsers(): Collection
-    {
-        return $this->repository->getAllUsers();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function findUserById($userId): ?User
-    {
-        return $this->repository->findUserByID($userId);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function findUserByUsernameOrEmail($userId): ?User
     {
         return $this->repository->findByUsernameOrEmail($userId);

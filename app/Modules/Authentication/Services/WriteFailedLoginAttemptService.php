@@ -31,12 +31,4 @@ class WriteFailedLoginAttemptService implements WriteFailedLoginAttemptServiceIn
         // Call the repository method to create the failed login attempt
         return $this->repository->createFailedLoginAttempt($loginAttemptDTO);
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function deleteFailedLoginAttempt(string $id): bool
-    {
-        return $this->repository->deleteFailedLoginAttempt($id);
-    }
 }

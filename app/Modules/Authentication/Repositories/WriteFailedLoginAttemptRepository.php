@@ -19,12 +19,4 @@ class WriteFailedLoginAttemptRepository implements WriteFailedLoginAttemptReposi
             'ip_address' => $login_attempt_details->getIpAddress(),
         ]);
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function deleteFailedLoginAttempt(string $id): bool
-    {
-        return FailedLoginAttempt::find($id)->delete();
-    }
 }

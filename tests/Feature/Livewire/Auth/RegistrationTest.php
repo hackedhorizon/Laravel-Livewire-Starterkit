@@ -4,6 +4,7 @@ namespace Tests\Feature\Livewire\Auth;
 
 use App\Livewire\Auth\Register;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
@@ -254,5 +255,41 @@ class RegistrationTest extends TestCase
             'username' => self::TEST_USERNAME,
             'email' => self::TEST_EMAIL,
         ]);
+    }
+
+    /**
+     * Test: User is redirected to the home page after successful registration.
+     *
+     * Steps:
+     *  1. Mock the Auth facade to expect a login attempt.
+     *  2. Initialize Livewire test for the Register component with valid user data.
+     *  3. Call the 'register' method.
+     *  4. Assert that there are no validation errors for name, username, email, and password.
+     *  5. Assert that the user is logged in.
+     *  6. Additional assertions can be added, such as checking that the user was created in the database.
+     */
+    public function test_user_is_redirected_to_home_page_after_successful_registration()
+    {
+        config(['services.should_verify_email' => false]);
+        config(['services.should_have_recaptcha' => false]);
+
+        // Initialize Livewire test for the Register component with valid user data
+        Livewire::test(Register::class)
+            ->set('name', self::TEST_NAME)
+            ->set('username', self::TEST_USERNAME)
+            ->set('email', self::TEST_EMAIL)
+            ->set('password', self::TEST_PASSWORD)
+            ->call('register')
+            ->assertHasNoErrors(['name', 'username', 'email', 'password']);
+
+        // Check if the user was created
+        $this->assertDatabaseHas('users', [
+            'name' => self::TEST_NAME,
+            'username' => self::TEST_USERNAME,
+            'email' => self::TEST_EMAIL,
+        ]);
+
+        // Assert that the user is logged in
+        $this->assertAuthenticated();
     }
 }

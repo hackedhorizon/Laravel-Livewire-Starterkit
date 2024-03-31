@@ -18,17 +18,17 @@ class LanguageSwitcher extends Component
         return view('livewire.features.language-switcher');
     }
 
+    public function mount(LocalizationService $localizationService)
+    {
+        $this->selectedLanguage = $localizationService->getAppLocale();
+        $this->languages = collect(Config::get('app.locales'));
+    }
+
     public function updatedSelectedLanguage(LocalizationService $localizationService)
     {
         $localizationService->updateCurrentlySelectedLanguage(Auth::id(), $this->selectedLanguage);
         $localizationService->setAppLocale($this->selectedLanguage);
 
         return $this->redirect('/', navigate: true);
-    }
-
-    public function mount(LocalizationService $localizationService)
-    {
-        $this->selectedLanguage = $localizationService->getAppLocale();
-        $this->languages = collect(Config::get('app.locales'));
     }
 }
