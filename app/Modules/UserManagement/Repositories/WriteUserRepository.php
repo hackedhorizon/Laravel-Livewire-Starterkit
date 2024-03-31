@@ -29,7 +29,7 @@ class WriteUserRepository implements WriteUserRepositoryInterface
     {
         $user = User::find($id);
 
-        if (!$user) {
+        if (! $user) {
             return false; // User not found, update unsuccessful.
         }
 

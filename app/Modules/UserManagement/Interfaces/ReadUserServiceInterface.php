@@ -3,7 +3,6 @@
 namespace App\Modules\UserManagement\Interfaces;
 
 use App\Models\User;
-use Illuminate\Database\Eloquent\Collection;
 
 /**
  * Interface ReadUserServiceInterface

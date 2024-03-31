@@ -5,7 +5,6 @@ namespace App\Modules\UserManagement\Services;
 use App\Models\User;
 use App\Modules\UserManagement\Interfaces\ReadUserServiceInterface;
 use App\Modules\UserManagement\Repositories\ReadUserRepository;
-use Illuminate\Database\Eloquent\Collection;
 
 class ReadUserService implements ReadUserServiceInterface
 {

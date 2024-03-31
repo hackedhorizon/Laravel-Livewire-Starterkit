@@ -26,6 +26,7 @@ class WriteUserService implements WriteUserServiceInterface
         $userDto->setUsername($username);
         $userDto->setEmail($email);
         $userDto->setPassword($password);
+
         return $this->repository->createUser($userDto);
     }
 
