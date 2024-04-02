@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Authentication\Interfaces;
+namespace App\Modules\Google\Interfaces;
 
 /**
  * Interface RecaptchaServiceInterface

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Modules\Authentication\Services;
+namespace App\Modules\Google\Services;
 
-use App\Modules\Authentication\Interfaces\RecaptchaServiceInterface;
+use App\Modules\Google\Interfaces\RecaptchaServiceInterface;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Validation\ValidationException;
 
