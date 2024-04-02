@@ -7,7 +7,7 @@
                 <span>{{ $message }}</span>
             @enderror
         </div>
-        <button type="submit">Reset Password</button>
+        <button type="submit">{{ __('Send') }}</button>
     </form>
 
     {{-- Reset password error message --}}

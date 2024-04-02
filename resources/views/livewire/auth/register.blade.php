@@ -48,7 +48,11 @@
         {{-- Register error message --}}
         <x-forms.error attribute='register' />
 
+        {{-- Login card with link --}}
+        <x-cards.login />
+
     </form>
+
 
     @if ($recaptchaEnabled)
         <script src="https://www.google.com/recaptcha/api.js?render={{ $siteKey }}"></script>
