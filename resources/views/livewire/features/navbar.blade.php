@@ -8,7 +8,6 @@
         @livewire('auth.logout')
     @else
         <a href="{{ route('home') }}" wire:navigate>{{ __('Home') }}</a>
-        <a href="{{ route('register') }}" wire:navigate>{{ __('Register') }}</a>
         <a href="{{ route('login') }}" wire:navigate>{{ __('Login') }}</a>
     @endauth
 

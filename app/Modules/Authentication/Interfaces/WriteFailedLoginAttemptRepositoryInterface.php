@@ -19,12 +19,4 @@ interface WriteFailedLoginAttemptRepositoryInterface
      * @return FailedLoginAttempt|null The created FailedLoginAttempt or null if creation failed.
      */
     public function createFailedLoginAttempt(LoginAttemptDTO $login_credentials): ?FailedLoginAttempt;
-
-    /**
-     * Delete a specific failed login attempt record by ID.
-     *
-     * @param  string  $id  The unique identifier of the failed login attempt to be deleted.
-     * @return bool True if the deletion was successful, false otherwise.
-     */
-    public function deleteFailedLoginAttempt(string $id): bool;
 }

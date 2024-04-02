@@ -24,6 +24,12 @@
         </div>
     @endsession
 
+    @session('message_failed')
+        <div class="text-white bg-green-500">
+            {{ $value }}
+        </div>
+    @endsession
+
     {{-- Body --}}
     <main>
         {{ $slot }}

@@ -62,34 +62,4 @@ class LoginAttemptDTO
     {
         return $this->ip_address;
     }
-
-    /**
-     * Set the user ID associated with the login attempt.
-     *
-     * @param  string  $user_id  The user ID to set.
-     */
-    public function setUserId(string $user_id): void
-    {
-        $this->user_id = $user_id;
-    }
-
-    /**
-     * Set the email address used for the login attempt.
-     *
-     * @param  string  $email_address  The email address to set.
-     */
-    public function setEmailAddress(string $email_address): void
-    {
-        $this->email_address = $email_address;
-    }
-
-    /**
-     * Set the IP address from which the login attempt was made.
-     *
-     * @param  string  $ip_address  The IP address to set.
-     */
-    public function setIpAddress(string $ip_address): void
-    {
-        $this->ip_address = $ip_address;
-    }
 }

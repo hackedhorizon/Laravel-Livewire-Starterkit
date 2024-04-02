@@ -27,8 +27,14 @@
         <x-buttons.primary-button target="login"
                                   translation="{{ __('Login') }}" />
 
-        <!-- Remember me checkbox-->
+        {{-- Remember me checkbox --}}
         <x-forms.remember-me />
+
+        {{-- Register card with link --}}
+        <x-cards.register />
+
+        {{-- Forgot password --}}
+        <x-cards.forgot-password />
 
         {{-- Display login error message if any --}}
         <x-forms.error attribute="login" />

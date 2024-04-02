@@ -8,4 +8,5 @@ return [
     'throttled' => 'Kérjük várjon, mielőtt újra megpróbálná.',
     'token' => 'Ez az új jelszó generálásához tartozó token érvénytelen.',
     'user' => 'Nem található felhasználó a megadott email címmel.',
+    'error' => 'Jelenleg nem tudunk visszaállító emailt küldeni. Próbálja újra később.',
 ];

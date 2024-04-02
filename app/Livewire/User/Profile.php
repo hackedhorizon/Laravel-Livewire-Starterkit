@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Auth;
+namespace App\Livewire\User;
 
 use App\Modules\RateLimiter\Services\RateLimiterService;
 use App\Modules\Registration\Services\EmailVerificationService;
@@ -41,7 +41,7 @@ class Profile extends Component
 
     public function render()
     {
-        return view('livewire.auth.profile')->title($this->pageTitle);
+        return view('livewire.user.profile')->title($this->pageTitle);
     }
 
     public function mount(ReadUserService $readUserService)

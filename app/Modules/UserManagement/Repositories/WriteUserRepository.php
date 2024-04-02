@@ -11,13 +11,13 @@ class WriteUserRepository implements WriteUserRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function createUser(UserDTO $userDataObject): ?User
+    public function createUser(UserDTO $userDataTransferObject): ?User
     {
         return User::create([
-            'name' => $userDataObject->getName(),
-            'username' => $userDataObject->getUserName(),
-            'email' => $userDataObject->getEmail(),
-            'password' => $userDataObject->getPassword(),
+            'name' => $userDataTransferObject->getName(),
+            'username' => $userDataTransferObject->getUserName(),
+            'email' => $userDataTransferObject->getEmail(),
+            'password' => $userDataTransferObject->getPassword(),
         ]);
     }
 
@@ -29,9 +29,11 @@ class WriteUserRepository implements WriteUserRepositoryInterface
     {
         $user = User::find($id);
 
-        if ($user) {
-            $user->update($data);
+        if (! $user) {
+            return false; // User not found, update unsuccessful.
         }
+
+        $user->update($data);
 
         return $user->save();
     }
@@ -49,6 +51,6 @@ class WriteUserRepository implements WriteUserRepositoryInterface
             return true;
         }
 
-        return false; // User not found, deletion unsuccessful.
+        return false;
     }
 }

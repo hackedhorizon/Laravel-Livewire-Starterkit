@@ -29,22 +29,9 @@ class UserDTO
 
     /**
      * Create a new UserDTO instance.
-     *
-     * @param  string  $name  The user's name.
-     * @param  string  $username  The user's username.
-     * @param  string  $email  The user's email address.
-     * @param  string  $password  The user's password.
      */
-    public function __construct(
-        string $name,
-        string $username,
-        string $email,
-        string $password
-    ) {
-        $this->name = $name;
-        $this->username = $username;
-        $this->email = $email;
-        $this->password = $password;
+    public function __construct()
+    {
     }
 
     /**
