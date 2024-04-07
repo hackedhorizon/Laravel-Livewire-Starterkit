@@ -12,6 +12,7 @@ This repository contains a Laravel Livewire application featuring registration a
 -   **Registration**: Users can register with their name, username, email, and password. Real-time registration validation, including field validation and reCAPTCHA verification, is implemented.
 -   **Rate Limiter**: Every component can be rate-limited (most of them are), using the RateLimiterService.
 -   **Email Verification**: You can enable or disable email verification for the users.
+-   **Deletion of unverified users**: Unverified user accounts can be automatically deleted every 7 days. This can be executed either through the `sail artisan schedule:work` command, which runs daily, or by manually triggering `sail artisan app:delete-unverified-users`. Modification of the deletion period can be done in the config/auth.php file under the expire key.
 -   **Password Reset**: Users can reset their passwords if they forget it.
 -   **Language Switching**: Users can select their preferred language using the language switcher component. Their language preference is stored in the session and, if authenticated, in the database. It supports Hungarian and English languages by default.
 -   **Failed login monitor**: Failed login attempts trigger an event that is listened to by the FailedLoginAttemptListener, which logs details of the attempt and stores it in the database. Most of these features are optional and can be turned off in the `.env` file.

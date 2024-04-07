@@ -112,4 +112,18 @@ return [
 
     'password_timeout' => 10800,
 
+    /*
+    |--------------------------------------------------------------------------
+    | Delete unverified users after a specific time intervall
+    |--------------------------------------------------------------------------
+    |
+    | Here you may define the amount of days before a user verification
+    | times out and the user is deleted. By default, the verification time is
+    | 7 days.
+    |
+    */
+
+    'verification' => [
+        'expire' => 7,
+    ],
 ];
