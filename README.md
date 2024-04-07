@@ -61,6 +61,8 @@ This repository contains a Laravel Livewire application featuring registration a
     sail up -d
     sail artisan key:generate
     sail npm i
+    sail npm run dev
+    sail npm run build
     sail artisan migrate
     ```
 
