@@ -186,7 +186,6 @@ return [
         App\Providers\RecaptchaServiceProvider::class,
         App\Providers\EmailVerificationServiceProvider::class,
         App\Providers\LocalizationServiceProvider::class,
-        Barryvdh\Debugbar\ServiceProvider::class,
     ])->toArray(),
 
     /*
