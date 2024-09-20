@@ -13,7 +13,7 @@ class EmailVerificationServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind(EmailVerificationService::class, function ($app) {
-            return new EmailVerificationService();
+            return new EmailVerificationService;
         });
     }
 

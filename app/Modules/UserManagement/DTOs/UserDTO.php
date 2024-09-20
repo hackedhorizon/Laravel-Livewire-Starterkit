@@ -30,9 +30,7 @@ class UserDTO
     /**
      * Create a new UserDTO instance.
      */
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     /**
      * Get the value of password.

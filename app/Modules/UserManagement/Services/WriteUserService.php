@@ -21,7 +21,7 @@ class WriteUserService implements WriteUserServiceInterface
      */
     public function createUser($name, $username, $email, $password): User
     {
-        $userDto = new UserDTO();
+        $userDto = new UserDTO;
         $userDto->setName($name);
         $userDto->setUsername($username);
         $userDto->setEmail($email);

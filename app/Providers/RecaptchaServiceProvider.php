@@ -13,7 +13,7 @@ class RecaptchaServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind(RecaptchaService::class, function ($app) {
-            return new RecaptchaService();
+            return new RecaptchaService;
         });
     }
 
