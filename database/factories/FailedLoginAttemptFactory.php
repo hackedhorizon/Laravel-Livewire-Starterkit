@@ -2,11 +2,12 @@
 
 namespace Database\Factories;
 
+use App\Models\FailedLoginAttempt;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\FailedLoginAttempt>
+ * @extends Factory<FailedLoginAttempt>
  */
 class FailedLoginAttemptFactory extends Factory
 {
