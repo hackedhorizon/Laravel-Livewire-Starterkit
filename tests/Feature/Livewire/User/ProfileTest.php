@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Livewire\User;
 
+use App\Livewire\Auth\EmailVerification;
 use App\Livewire\User\Profile;
 use App\Models\User;
 use App\Modules\Registration\Services\EmailVerificationService;
@@ -27,9 +28,9 @@ class ProfileTest extends TestCase
         parent::setUp();
 
         // Define the routes necessary for testing (in case this functionality is disabled)
-        Route::get('/verify-email', [\App\Livewire\Auth\EmailVerification::class, '__invoke'])->name('verification.notice');
-        Route::get('/verify-email/{id}/{hash}', [\App\Livewire\Auth\EmailVerification::class, 'verifyEmail'])->name('verification.verify');
-        Route::post('/verify-email/send-notification', [\App\Livewire\Auth\EmailVerification::class, 'sendVerificationEmail'])->name('verification.send');
+        Route::get('/verify-email', [EmailVerification::class, '__invoke'])->name('verification.notice');
+        Route::get('/verify-email/{id}/{hash}', [EmailVerification::class, 'verifyEmail'])->name('verification.verify');
+        Route::post('/verify-email/send-notification', [EmailVerification::class, 'sendVerificationEmail'])->name('verification.send');
     }
 
     /**
