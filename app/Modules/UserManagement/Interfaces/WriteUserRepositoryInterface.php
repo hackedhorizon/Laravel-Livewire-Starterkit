@@ -16,7 +16,7 @@ interface WriteUserRepositoryInterface
      * Create a new user in the database.
      *
      * @param  UserDTO  $userDataObject  User DTO for creation.
-     * @return \App\Models\User|null Created user instance or null if creation fails.
+     * @return User|null Created user instance or null if creation fails.
      */
     public function createUser(UserDTO $userDataObject): ?User;
 
