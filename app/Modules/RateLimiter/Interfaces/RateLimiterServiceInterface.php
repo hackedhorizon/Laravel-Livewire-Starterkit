@@ -2,6 +2,8 @@
 
 namespace App\Modules\RateLimiter\Interfaces;
 
+use DanHarrin\LivewireRateLimiting\Exceptions\TooManyRequestsException;
+
 /**
  * Interface RateLimiterServiceInterface
  *
@@ -32,7 +34,7 @@ interface RateLimiterServiceInterface
     /**
      * Check if there are too many failed attempts and throw an exception if the limit is reached.
      *
-     * @throws \DanHarrin\LivewireRateLimiting\Exceptions\TooManyRequestsException
+     * @throws TooManyRequestsException
      */
     public function checkTooManyFailedAttempts(): self;
 
